@@ -17,13 +17,14 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="16dp"
             android:layout_marginStart="32dp"
-            android:textColor="@color/secondaryColor"
             android:text="Media"
+            android:textColor="@color/secondaryColor"
             android:textStyle="bold" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp">
 
@@ -51,13 +52,14 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="16dp"
             android:layout_marginStart="32dp"
-            android:textColor="@color/secondaryColor"
             android:text="Description"
+            android:textColor="@color/secondaryColor"
             android:textStyle="bold" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="8dp">
 
@@ -71,14 +73,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:hint="Apoejzkr zeprojazek, poaezkrpazoekj pojerpzaoje z,er pozej pzojef ozje! poezk
-zoepj fP?epzo ef, ez,feok ^zle;f^ozejkfoknr tgo^qkner opjnqdfpoguih
-eortnqk^sdjfgioqenrgklmqfdjg. fjspoie jrfpJ EPRIJ peo rqpsok fqejp PO ZFRPQE?RFPDOjs q" />
+                    android:hint="Tu comprends, je suis mon meilleur modèle car entre penser et dire,
+il y a un monde de différence et c'est très, très beau d'avoir son propre moi-même !
+C'est cette année que j'ai eu la révélation !\n
+You see, premièrement, on vit dans une réalité qu'on a créée et que j'appelle illusion et finalement
+tout refaire depuis le début. Et j'ai toujours grandi parmi les chiens.\n
+Oui alors écoute moi, tu vois au passage qu'il n'y a rien de concret car le cycle du cosmos dans la vie...
+c'est une grande roue et cette officialité peut vraiment retarder ce qui devrait devenir...
+C'est cette année que j'ai eu la révélation !"
+                    tools:ignore="HardcodedText" />
 
             </ScrollView>
 
         </androidx.cardview.widget.CardView>
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -100,8 +107,8 @@ eortnqk^sdjfgioqenrgklmqfdjg. fjspoie jrfpJ EPRIJ peo rqpsok fqejp PO ZFRPQE?RFP
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="4dp"
                     android:drawablePadding="16dp"
-                    android:textColor="@color/secondaryDarkColor"
                     android:text="Surface"
+                    android:textColor="@color/secondaryDarkColor"
                     app:drawableStartCompat="@drawable/ic_surface" />
 
                 <TextView
@@ -119,9 +126,9 @@ eortnqk^sdjfgioqenrgklmqfdjg. fjspoie jrfpJ EPRIJ peo rqpsok fqejp PO ZFRPQE?RFP
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="4dp"
-                    android:textColor="@color/secondaryDarkColor"
                     android:drawablePadding="16dp"
                     android:text="Rooms"
+                    android:textColor="@color/secondaryDarkColor"
                     app:drawableStartCompat="@drawable/ic_room" />
 
                 <TextView
@@ -137,7 +144,7 @@ eortnqk^sdjfgioqenrgklmqfdjg. fjspoie jrfpJ EPRIJ peo rqpsok fqejp PO ZFRPQE?RFP
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_weight="6"
                 android:orientation="vertical">
 
                 <TextView
@@ -148,8 +155,8 @@ eortnqk^sdjfgioqenrgklmqfdjg. fjspoie jrfpJ EPRIJ peo rqpsok fqejp PO ZFRPQE?RFP
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="4dp"
                     android:drawablePadding="16dp"
-                    android:textColor="@color/secondaryDarkColor"
                     android:text="Bathrooms"
+                    android:textColor="@color/secondaryDarkColor"
                     app:drawableStartCompat="@drawable/ic_bathroom" />
 
                 <TextView
@@ -168,8 +175,8 @@ eortnqk^sdjfgioqenrgklmqfdjg. fjspoie jrfpJ EPRIJ peo rqpsok fqejp PO ZFRPQE?RFP
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="4dp"
                     android:drawablePadding="16dp"
-                    android:textColor="@color/secondaryDarkColor"
                     android:text="Bedrooms"
+                    android:textColor="@color/secondaryDarkColor"
                     app:drawableStartCompat="@drawable/ic_bedroom" />
 
                 <TextView
@@ -184,25 +191,53 @@ eortnqk^sdjfgioqenrgklmqfdjg. fjspoie jrfpJ EPRIJ peo rqpsok fqejp PO ZFRPQE?RFP
 
         </LinearLayout>
 
-        <TextView
-            style="@style/TextAppearance.MaterialComponents.Headline6"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="4dp"
-            android:drawablePadding="16dp"
-            android:textColor="@color/secondaryDarkColor"
-            android:text="Location"
-            app:drawableStartCompat="@drawable/ic_location" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/house_location_detail"
-            style="@style/TextAppearance.MaterialComponents.Body2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:hint="740 park Avenue\nApt6/7A\nNewYork\nNY10021\nUnited States" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextAppearance.MaterialComponents.Headline6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="4dp"
+                    android:drawablePadding="16dp"
+                    android:text="Location"
+                    android:textColor="@color/secondaryDarkColor"
+                    app:drawableStartCompat="@drawable/ic_location" />
+
+                <TextView
+                    android:id="@+id/house_location_detail"
+                    style="@style/TextAppearance.MaterialComponents.Body2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:hint="740 park Avenue\nApt6/7A\nNewYork\nNY10021\nUnited States" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="300dp"
+                    android:layout_height="200dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
