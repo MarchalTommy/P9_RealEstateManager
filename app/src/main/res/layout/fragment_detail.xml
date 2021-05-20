@@ -43,8 +43,7 @@
                     android:id="@+id/house_media_rv_detail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingStart="-8dp"
-                    android:paddingBottom="-8dp"
+                    android:paddingStart="-12dp"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/media_rv_item" />
@@ -95,8 +94,8 @@ tout refaire depuis le début. Et j'ai toujours grandi parmi les chiens.\n
 Oui alors écoute moi, tu vois au passage qu'il n'y a rien de concret car le cycle du cosmos dans la vie...
 c'est une grande roue et cette officialité peut vraiment retarder ce qui devrait devenir...
 C'est cette année que j'ai eu la révélation !"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="32dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="26dp"
                     android:textSize="18sp"
                     tools:ignore="HardcodedText" />
 
