@@ -38,16 +38,34 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/house_media_rv_detail"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingStart="-12dp"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/media_rv_item" />
+                    android:orientation="horizontal">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/house_media_rv_detail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingStart="-12dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/media_rv_item" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/edit_media_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:visibility="gone"
+                    android:text="Add new photo"
+                    android:textColor="@color/secondaryDarkColor"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -77,17 +95,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/description_title">
 
-            <ScrollView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="164dp">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/house_description_detail"
-                    style="@style/TextAppearance.MaterialComponents.Body1"
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:hint="Tu comprends, je suis mon meilleur modèle car entre penser et dire,
+                    android:layout_height="164dp">
+
+                    <TextView
+                        android:id="@+id/house_description_detail"
+                        style="@style/TextAppearance.MaterialComponents.Body1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:hint="Tu comprends, je suis mon meilleur modèle car entre penser et dire,
 il y a un monde de différence et c'est très, très beau d'avoir son propre moi-même !
 C'est cette année que j'ai eu la révélation !\n
 You see, premièrement, on vit dans une réalité qu'on a créée et que j'appelle illusion et finalement
@@ -95,12 +118,25 @@ tout refaire depuis le début. Et j'ai toujours grandi parmi les chiens.\n
 Oui alors écoute moi, tu vois au passage qu'il n'y a rien de concret car le cycle du cosmos dans la vie...
 c'est une grande roue et cette officialité peut vraiment retarder ce qui devrait devenir...
 C'est cette année que j'ai eu la révélation !"
-                    android:paddingTop="2dp"
-                    android:paddingBottom="26dp"
-                    android:textSize="18sp"
-                    tools:ignore="HardcodedText" />
+                        android:paddingTop="2dp"
+                        android:paddingBottom="26dp"
+                        android:textSize="18sp"
+                        tools:ignore="HardcodedText" />
 
-            </ScrollView>
+                </ScrollView>
+
+                <Button
+                    android:id="@+id/edit_description_button"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:text="Edit description"
+                    android:visibility="gone"
+                    android:textColor="@color/secondaryDarkColor"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
@@ -113,11 +149,11 @@ C'est cette année que j'ai eu la révélation !"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="4dp"
             android:drawablePadding="16dp"
+            android:drawableTint="@color/secondaryDarkColor"
             android:text="Surface"
             android:textColor="@color/primaryDarkColor"
             android:textSize="24sp"
             app:drawableStartCompat="@drawable/ic_surface"
-            android:drawableTint="@color/secondaryDarkColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/description_cardview" />
 
@@ -140,11 +176,11 @@ C'est cette année que j'ai eu la révélation !"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="4dp"
             android:drawablePadding="16dp"
+            android:drawableTint="@color/secondaryDarkColor"
             android:text="Rooms"
             android:textColor="@color/primaryDarkColor"
             android:textSize="24sp"
             app:drawableStartCompat="@drawable/ic_room"
-            android:drawableTint="@color/secondaryDarkColor"
             app:layout_constraintStart_toStartOf="@id/bedrooms"
             app:layout_constraintTop_toBottomOf="@id/description_cardview" />
 
@@ -168,11 +204,11 @@ C'est cette année que j'ai eu la révélation !"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="4dp"
             android:drawablePadding="16dp"
+            android:drawableTint="@color/secondaryDarkColor"
             android:text="Bathrooms"
             android:textColor="@color/primaryDarkColor"
             android:textSize="24sp"
             app:drawableStartCompat="@drawable/ic_bathroom"
-            android:drawableTint="@color/secondaryDarkColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/house_surface_detail" />
 
@@ -196,11 +232,11 @@ C'est cette année que j'ai eu la révélation !"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="4dp"
             android:drawablePadding="16dp"
+            android:drawableTint="@color/secondaryDarkColor"
             android:text="Bedrooms"
             android:textColor="@color/primaryDarkColor"
             android:textSize="24sp"
             app:drawableStartCompat="@drawable/ic_bedroom"
-            android:drawableTint="@color/secondaryDarkColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/house_rooms_detail" />
 
@@ -223,11 +259,11 @@ C'est cette année que j'ai eu la révélation !"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="4dp"
             android:drawablePadding="16dp"
+            android:drawableTint="@color/secondaryDarkColor"
             android:text="Location"
             android:textColor="@color/primaryDarkColor"
             android:textSize="24sp"
             app:drawableStartCompat="@drawable/ic_location"
-            android:drawableTint="@color/secondaryDarkColor"
             app:layout_constraintEnd_toEndOf="@id/rooms"
             app:layout_constraintStart_toStartOf="@id/surface"
             app:layout_constraintTop_toBottomOf="@id/house_bedrooms_detail" />
@@ -243,26 +279,43 @@ C'est cette année que j'ai eu la révélation !"
             app:layout_constraintStart_toStartOf="@id/location"
             app:layout_constraintTop_toBottomOf="@id/location" />
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="0dp"
-            android:layout_height="2dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginHorizontal="64dp"
-            android:background="@color/secondaryDarkColor"
-            app:layout_constraintEnd_toEndOf="parent"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/house_location_detail"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/house_location_detail" />
+            app:layout_constraintEnd_toEndOf="parent">
 
+            <Button
+                android:id="@+id/edit_details_button"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginTop="16dp"
+                android:visibility="gone"
+                android:text="Edit home details"
+                android:textColor="@color/secondaryDarkColor"
+                android:textSize="16sp"/>
 
-        <ImageView
-            android:id="@+id/static_map_pic"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_marginTop="32dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/house_location_detail" />
+            <View
+                android:id="@+id/divider"
+                android:layout_width="250dp"
+                android:layout_height="2dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="16dp"
+                android:background="@color/secondaryDarkColor"/>
+
+            <ImageView
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/static_map_pic"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
