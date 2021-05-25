@@ -84,8 +84,6 @@
                     style="@style/TextAppearance.MaterialComponents.Body1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingTop="4dp"
-                    android:paddingBottom="16dp"
                     android:layout_margin="8dp"
                     android:hint="Tu comprends, je suis mon meilleur modèle car entre penser et dire,
 il y a un monde de différence et c'est très, très beau d'avoir son propre moi-même !
@@ -95,6 +93,8 @@ tout refaire depuis le début. Et j'ai toujours grandi parmi les chiens.\n
 Oui alors écoute moi, tu vois au passage qu'il n'y a rien de concret car le cycle du cosmos dans la vie...
 c'est une grande roue et cette officialité peut vraiment retarder ce qui devrait devenir...
 C'est cette année que j'ai eu la révélation !"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="16dp"
                     android:textSize="18sp"
                     tools:ignore="HardcodedText" />
 
@@ -215,16 +215,15 @@ C'est cette année que j'ai eu la révélation !"
             style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginBottom="4dp"
             android:drawablePadding="16dp"
             android:text="Location"
             android:textColor="@color/secondaryDarkColor"
             android:textSize="24sp"
             app:drawableStartCompat="@drawable/ic_location"
-            app:layout_constraintEnd_toEndOf="@id/rooms"
-            app:layout_constraintStart_toStartOf="@id/surface"
-            app:layout_constraintTop_toBottomOf="@id/house_bedrooms_detail" />
+            app:layout_constraintStart_toEndOf="@id/bedrooms"
+            app:layout_constraintTop_toTopOf="@id/rooms" />
 
         <TextView
             android:id="@+id/house_location_detail"
@@ -236,6 +235,15 @@ C'est cette année que j'ai eu la révélation !"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="@id/location"
             app:layout_constraintTop_toBottomOf="@id/location" />
+
+        <ImageView
+            android:id="@+id/static_map_pic"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/location"
+            app:layout_constraintTop_toBottomOf="@id/description_cardview" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
