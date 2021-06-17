@@ -18,7 +18,7 @@
         app:menu="@menu/toolbar_menu"
         app:title="Real Estate Manager" />
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/list_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"

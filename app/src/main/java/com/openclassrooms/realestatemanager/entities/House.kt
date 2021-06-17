@@ -1,7 +1,6 @@
 package com.openclassrooms.realestatemanager.entities
 
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import java.sql.Timestamp
 
@@ -9,9 +8,9 @@ import java.sql.Timestamp
 data class House(
         @PrimaryKey
         val houseId: Int,
-        val price: Float,
+        val price: Int,
         val type: String,
-        val size: Float,
+        val size: Int,
         val nbrRooms: Int,
         val description: String,
         // TODO: 15/06/2021 Comment photo depuis telephone ? Pas un lien du coup... Et si plusieurs ?
@@ -23,4 +22,5 @@ data class House(
         val dateSell: Timestamp,
         val agentId: Int,
         val addressId: Int
-        )
+        ) {
+}

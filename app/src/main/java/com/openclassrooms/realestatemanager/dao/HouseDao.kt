@@ -19,14 +19,12 @@ interface HouseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAgent(agent: Agent)
 
-    @Transaction
     @Query("SELECT * FROM house WHERE addressId = :addressId")
-    suspend fun getHouseWithAddress(addressId: Int): List<HouseAndAddress>
+    suspend fun getHouseOfAddress(addressId: Int): List<House>
 
-    @Transaction
-    @Query("SELECT * FROM house WHERE agentId = :agentId")
-    suspend fun getHousesWithAgent(agentId: Int): List<AgentWithHouses>
+    @Query("SELECT * FROM House WHERE agentId = :agentId")
+    suspend fun getHousesOfAgent(agentId: Int): List<House>
 
     @Query("SELECT * FROM house WHERE type = :type")
-    suspend fun getHouseWithType(type: String): List<House>
+    suspend fun getHouseOfType(type: String): List<House>
 }
