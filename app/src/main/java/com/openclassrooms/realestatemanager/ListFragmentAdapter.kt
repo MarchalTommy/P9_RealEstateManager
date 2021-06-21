@@ -19,8 +19,7 @@ class ListFragmentAdapter(private val dataSet: List<HouseAndAddress>) : Recycler
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = dataSet[position]
         holder.houseType.text = currentItem.house.type
-
-        //RECUPERER L'ADDRESSE JE SAIS PAS COMMENT
+        
         holder.houseLocation.text = currentItem.address.city
 
         holder.housePrice.text = "$${currentItem.house.price}"
