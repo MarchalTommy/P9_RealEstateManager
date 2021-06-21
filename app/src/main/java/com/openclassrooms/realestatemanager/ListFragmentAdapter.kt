@@ -7,9 +7,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.openclassrooms.realestatemanager.entities.House
+import com.openclassrooms.realestatemanager.entities.relations.HouseAndAddress
 
-class ListFragmentAdapter(private val dataSet: Array<House>) : RecyclerView.Adapter<ListFragmentAdapter.ViewHolder>() {
+class ListFragmentAdapter(private val dataSet: List<HouseAndAddress>) : RecyclerView.Adapter<ListFragmentAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_view_item, parent, false)
@@ -18,16 +18,16 @@ class ListFragmentAdapter(private val dataSet: Array<House>) : RecyclerView.Adap
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = dataSet[position]
-        holder.houseType.text = currentItem.type
+        holder.houseType.text = currentItem.house.type
 
         //RECUPERER L'ADDRESSE JE SAIS PAS COMMENT
-        holder.houseLocation.text = currentItem.addressId.toString()
+        holder.houseLocation.text = currentItem.address.city
 
-        holder.housePrice.text = currentItem.price.toString()
+        holder.housePrice.text = "$${currentItem.house.price}"
 
         //Vérifier mais peut être ok, je sais pas trop...
         Glide.with(holder.itemView)
-                .load(currentItem.pictureURL)
+                .load(currentItem.house.pictureURL)
                 .into(holder.housePic)
     }
 

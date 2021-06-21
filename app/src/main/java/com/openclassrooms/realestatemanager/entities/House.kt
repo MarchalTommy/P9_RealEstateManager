@@ -18,8 +18,8 @@ data class House(
         val pictureURL: String,
         val interestsAround: String,
         val stillAvailable: Boolean,
-        val dateEntryOnMarket: Timestamp,
-        val dateSell: Timestamp,
+        val dateEntryOnMarket: String,
+        val dateSell: String,
         val agentId: Int,
         val addressId: Int
         ) {

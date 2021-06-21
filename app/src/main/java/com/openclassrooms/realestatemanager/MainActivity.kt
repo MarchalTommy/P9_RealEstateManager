@@ -1,10 +1,12 @@
 package com.openclassrooms.realestatemanager
 
-import android.os.Build
 import android.os.Bundle
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.dao.HouseDao
 import com.openclassrooms.realestatemanager.entities.Address
 import com.openclassrooms.realestatemanager.entities.Agent
@@ -16,19 +18,15 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var dao: HouseDao
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        dao = EstateDatabase.getInstance(this).houseDao
 
+        dao = EstateDatabase.getInstance(this).houseDao
         prepopulateRoomDB()
 
-        prepareAdapter()
-    }
+        setContentView(R.layout.activity_main)
 
-    private fun prepareAdapter() {
-        TODO("Not yet implemented")
+
     }
 
     private fun prepopulateRoomDB() {
@@ -48,16 +46,16 @@ class MainActivity : AppCompatActivity() {
         val houses = listOf(
                 House(1, 8450000, "Mansion", 850, 10,
                         "", "", "", true,
-                        timestamp,timestamp, 1, 1),
+                        "27/05/2020", " ", 1, 1),
                 House(2, 1325000, "Mansion", 1220, 18,
                         "", "", "", true,
-                        timestamp,timestamp, 2, 4),
+                        "27/05/2020", " ", 2, 4),
                 House(3, 650000, "Villa", 350, 6,
                         "", "", "", false,
-                        timestamp,timestamp, 3, 2),
+                        "27/05/2020", "29/06/2021", 3, 2),
                 House(4, 1000000, "Villa", 600, 8,
                         "", "", "", true,
-                        timestamp,timestamp, 3, 3),
+                        "27/05/2020", " ", 3, 3),
         )
         lifecycleScope.launch {
             addresses.forEach { dao.insertAddress(it) }

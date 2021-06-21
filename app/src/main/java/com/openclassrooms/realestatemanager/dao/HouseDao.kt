@@ -27,4 +27,18 @@ interface HouseDao {
 
     @Query("SELECT * FROM house WHERE type = :type")
     suspend fun getHouseOfType(type: String): List<House>
+
+    @Query("SELECT * FROM house")
+    suspend fun getAllHouses(): List<House>
+
+    @Query("SELECT * FROM address WHERE houseId = :houseId")
+    suspend fun getAddressFromHouse(houseId: Int): List<Address>
+
+    @Transaction
+    @Query("SELECT * FROM house WHERE houseId = :houseId")
+    suspend fun getHouseWithAddress(houseId: Int): List<HouseAndAddress>
+
+    @Transaction
+    @Query("SELECT * FROM house")
+    suspend fun getAllHousesAndAddresses(): List<HouseAndAddress>
 }
