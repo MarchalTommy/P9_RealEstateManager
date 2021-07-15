@@ -8,6 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.entities.relations.HouseAndAddress
+import com.openclassrooms.realestatemanager.events.FromListToDetail
+import org.greenrobot.eventbus.EventBus
 
 class ListFragmentAdapter(private val dataSet: List<HouseAndAddress>) : RecyclerView.Adapter<ListFragmentAdapter.ViewHolder>() {
 
@@ -19,7 +21,7 @@ class ListFragmentAdapter(private val dataSet: List<HouseAndAddress>) : Recycler
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = dataSet[position]
         holder.houseType.text = currentItem.house.type
-        
+
         holder.houseLocation.text = currentItem.address.city
 
         holder.housePrice.text = "$${currentItem.house.price}"
@@ -28,6 +30,10 @@ class ListFragmentAdapter(private val dataSet: List<HouseAndAddress>) : Recycler
         Glide.with(holder.itemView)
                 .load(currentItem.house.pictureURL)
                 .into(holder.housePic)
+
+        holder.itemView.setOnClickListener(View.OnClickListener {
+        EventBus.getDefault().post(FromListToDetail(dataSet[position]))
+        })
     }
 
     override fun getItemCount() = dataSet.size

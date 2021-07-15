@@ -43,14 +43,11 @@ class ListFragment : BaseFragment() {
 
             prepareAdapter(housesAndAddress)
         }
-
-
     }
 
     private fun prepareAdapter(dataSet: List<HouseAndAddress>) {
         recyclerView.adapter = ListFragmentAdapter(dataSet)
         recyclerView.layoutManager = LinearLayoutManager(thisContext)
         recyclerView.setHasFixedSize(true)
-
     }
 }
