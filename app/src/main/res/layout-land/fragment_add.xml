@@ -11,6 +11,16 @@
         android:layout_height="wrap_content"
         android:paddingBottom="32dp">
 
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:src="@drawable/twotone_add_task_black_24dp"
+            app:backgroundTint="@color/secondaryDarkColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="@android:color/white" />
+
         <TextView
             android:id="@+id/new_description_title"
             style="@style/TextAppearance.MaterialComponents.Headline4"

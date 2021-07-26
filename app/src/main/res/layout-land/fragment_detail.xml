@@ -307,8 +307,8 @@ C'est cette année que j'ai eu la révélation !"
 
             <View
                 android:id="@+id/divider"
-                android:layout_width="250dp"
-                android:layout_height="2dp"
+                android:layout_width="275dp"
+                android:layout_height="1dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="16dp"
                 android:background="@color/secondaryDarkColor"/>

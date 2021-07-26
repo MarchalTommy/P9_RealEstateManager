@@ -2,11 +2,14 @@ package com.openclassrooms.realestatemanager;
 
 import android.app.usage.NetworkStatsManager;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.view.WindowManager;
 
 import androidx.annotation.RequiresApi;
 
@@ -76,5 +79,13 @@ public class Utils {
                 = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public static Boolean isLandscape(Context context) {
+        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
+    }
+
+    public static Boolean isTablet(Context context) {
+        return context.getResources().getBoolean(R.bool.isTablet);
     }
 }

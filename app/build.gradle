@@ -2,6 +2,8 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-android-extensions'
+    id 'androidx.navigation.safeargs.kotlin'
 }
 kapt {
     correctErrorTypes = true
@@ -15,6 +17,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
     buildTypes {
@@ -40,6 +43,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.3.1'
+    implementation 'androidx.recyclerview:recyclerview:1.2.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation 'junit:junit:4.13.2'
@@ -64,6 +68,7 @@ dependencies {
     // ROOM
     implementation "androidx.room:room-runtime:2.3.0"
     kapt "androidx.room:room-compiler:2.3.0"
+    implementation "androidx.room:room-ktx:2.3.0"
 
     // Kotlin extensions and coroutines support for Room
     implementation "androidx.room:room-ktx:2.3.0"
