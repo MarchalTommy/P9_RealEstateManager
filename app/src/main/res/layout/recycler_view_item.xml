@@ -16,7 +16,9 @@
                 android:id="@+id/house_pic"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_margin="8dp" />
+                android:layout_margin="8dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/mansion"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,7 +32,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:layout_marginTop="4dp"
-                    android:hint="Penthouse"
+                    android:hint="Mansion"
                     android:textStyle="bold" />
 
                 <TextView

@@ -7,6 +7,8 @@
         <item name="colorPrimaryDark">@color/primaryDarkColor</item>
         <item name="colorAccent">@color/secondaryColor</item>
 
+        <item name="floatingActionButtonStyle">@color/secondaryLightColor</item>
+
     </style>
 
 </resources>

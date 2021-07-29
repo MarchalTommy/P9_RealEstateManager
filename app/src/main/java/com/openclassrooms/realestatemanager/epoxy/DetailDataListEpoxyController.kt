@@ -1,15 +1,13 @@
 package com.openclassrooms.realestatemanager.epoxy
 
+import android.content.Context
+import com.airbnb.epoxy.CarouselModel_
 import com.airbnb.epoxy.EpoxyController
-import com.airbnb.epoxy.EpoxyModel
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.entities.House
-import com.openclassrooms.realestatemanager.databinding.ModelDetailBathroomsBinding
-import com.openclassrooms.realestatemanager.databinding.ModelDetailBedroomBinding
-import com.openclassrooms.realestatemanager.databinding.ModelDetailRoomBinding
 import com.openclassrooms.realestatemanager.databinding.ModelDetailSizeBinding
 
-class DetailDataListEpoxyController : EpoxyController() {
+class DetailDataListEpoxyController(val context: Context) : EpoxyController() {
 
     var house: House? = null
         set(value) {
@@ -20,58 +18,44 @@ class DetailDataListEpoxyController : EpoxyController() {
         }
 
     override fun buildModels() {
-        if(house == null) {
+        if (house == null) {
             return
         }
 
-        SizeEpoxyModel(
-                size = house!!.size.toString()
+        val test = listOf(
+            DataCarouselModel(
+                R.drawable.ic_surface,
+                "${house!!.size} m²"
+            ).id("size"),
+            DataCarouselModel(
+                R.drawable.ic_room,
+                house!!.nbrRooms.toString()
+            ).id("roomNbr"),
+            DataCarouselModel(
+                R.drawable.ic_bathroom,
+                (house!!.nbrRooms / 4).toString()
+            ).id("bathroomNbr"),
+            DataCarouselModel(
+                R.drawable.ic_bedroom,
+                (house!!.nbrRooms / 3).toString()
+            ).id("bedroomNbr"),
         )
 
-        RoomsEpoxyModel(
-                numbers = house!!.nbrRooms.toString()
-        )
-
-        BathroomsEpoxyModel(
-                numbers = (house!!.nbrRooms/4).toString()
-        )
-
-        BedroomsEpoxyModel(
-                numbers = (house!!.nbrRooms/3).toString()
-        )
-
+        CarouselModel_()
+            .models(test)
+            .id("dataCarousel")
+            .numViewsToShowOnScreen(2.75f)
+            .addTo(this)
 
     }
 
-    data class SizeEpoxyModel(
-            val size: String
+    data class DataCarouselModel(
+        val drawable: Int,
+        val text: String
     ) : ViewBindingKotlinModel<ModelDetailSizeBinding>(R.layout.model_detail_size) {
         override fun ModelDetailSizeBinding.bind() {
-            modelSize.text = size
-        }
-    }
-
-    data class BathroomsEpoxyModel(
-            val numbers: String
-    ) : ViewBindingKotlinModel<ModelDetailBathroomsBinding>(R.layout.model_detail_bathrooms) {
-        override fun ModelDetailBathroomsBinding.bind() {
-            modelBathroom.text = numbers
-        }
-    }
-
-    data class RoomsEpoxyModel(
-            val numbers: String
-    ) : ViewBindingKotlinModel<ModelDetailRoomBinding>(R.layout.model_detail_room) {
-        override fun ModelDetailRoomBinding.bind() {
-            modelRoom.text = numbers
-        }
-    }
-
-    data class BedroomsEpoxyModel(
-            val numbers: String
-    ) : ViewBindingKotlinModel<ModelDetailBedroomBinding>(R.layout.model_detail_bedroom) {
-        override fun ModelDetailBedroomBinding.bind() {
-            modelBedroom.text = numbers
+            modelSize.text = text
+            modelSize.setCompoundDrawablesWithIntrinsicBounds(drawable, 0, 0, 0)
         }
     }
 

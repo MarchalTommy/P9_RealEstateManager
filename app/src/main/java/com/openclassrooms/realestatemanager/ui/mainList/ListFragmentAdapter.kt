@@ -12,7 +12,7 @@ import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
 
 class ListFragmentAdapter(private val dataSet: List<HouseAndAddress>,
-                          private val twoPane: Boolean) :
+                          private val onClick: (Int) -> Unit) :
         RecyclerView.Adapter<ListFragmentAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -29,18 +29,13 @@ class ListFragmentAdapter(private val dataSet: List<HouseAndAddress>,
         holder.housePrice.text = "$${currentItem.house.price}"
 
         //Vérifier mais peut être ok, je sais pas trop...
-        Glide.with(holder.itemView)
-                .load(currentItem.house.pictureURL)
-                .into(holder.housePic)
+//        Glide.with(holder.itemView)
+//                .load(currentItem.house.pictureURL)
+//                .into(holder.housePic)
 
-        // Kinda works, but is shit.
+
         holder.itemView.setOnClickListener {
-
-            if (twoPane) {
-//                holder.itemView.findNavController().navigate(actionTwoPane)
-            } else {
-//                holder.itemView.findNavController().navigate(action)
-            }
+                onClick(currentItem.house.houseId)
         }
     }
 

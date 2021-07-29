@@ -10,12 +10,14 @@ import com.openclassrooms.realestatemanager.database.entities.Agent
 import com.openclassrooms.realestatemanager.database.entities.House
 
 @Database(
-        entities = [
-            House::class,
-            Agent::class,
-            Address::class
-        ],
-        version = 1
+    entities = [
+        House::class,
+        Agent::class,
+        Address::class
+    ],
+    version = 1,
+    exportSchema = false
+
 )
 abstract class EstateDatabase : RoomDatabase() {
 
@@ -28,11 +30,13 @@ abstract class EstateDatabase : RoomDatabase() {
         fun getInstance(context: Context): EstateDatabase {
             synchronized(this) {
                 return INSTANCE ?: Room.databaseBuilder(
-                        context.applicationContext,
-                        EstateDatabase::class.java,
-                        "estate_db"
-                ).build()
-                        .also { INSTANCE = it }
+                    context.applicationContext,
+                    EstateDatabase::class.java,
+                    "estate_db"
+                )
+//                    .fallbackToDestructiveMigration()
+                    .build()
+                    .also { INSTANCE = it }
             }
         }
     }

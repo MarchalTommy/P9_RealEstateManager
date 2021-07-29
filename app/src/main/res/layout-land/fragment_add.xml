@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,8 +16,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:src="@drawable/twotone_add_task_black_24dp"
-            app:backgroundTint="@color/secondaryDarkColor"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:backgroundTint="@color/secondaryColor"
+            app:layout_constraintTop_toBottomOf="@id/rv_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:tint="@android:color/white" />
 
@@ -27,9 +27,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginVertical="16dp"
-            android:layout_marginStart="32dp"
-            android:paddingBottom="8dp"
-            android:text="New Description :"
+            android:layout_marginStart="16dp"
+            android:text="Add a new estate :"
             android:textColor="@color/primaryColor"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,10 +39,10 @@
             style="@style/Widget.Design.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="32dp"
-            android:hint="Click here to add a description !"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Add a description here"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
             app:boxStrokeWidth="3dp"
@@ -68,20 +67,6 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/new_detail_title"
-            style="@style/TextAppearance.MaterialComponents.Headline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="16dp"
-            android:layout_marginStart="32dp"
-            android:paddingBottom="8dp"
-            android:text="Details :"
-            android:textColor="@color/primaryColor"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/description_layout" />
-
-        <TextView
             android:id="@+id/surface"
             style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="wrap_content"
@@ -96,15 +81,14 @@
             app:drawableStartCompat="@drawable/ic_surface"
             app:drawableTint="@color/secondaryDarkColor"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/location"
-            app:layout_constraintTop_toBottomOf="@id/new_detail_title" />
+            app:layout_constraintTop_toBottomOf="@id/description_layout" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/surface_layout"
             style="@style/Widget.Design.TextInputLayout"
-            android:layout_width="0dp"
+            android:layout_width="125dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="16dp"
             android:layout_marginEnd="4dp"
             android:hint="Surface"
             app:boxBackgroundMode="outline"
@@ -115,8 +99,7 @@
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryLightColor"
-            app:layout_constraintEnd_toEndOf="@id/surface"
-            app:layout_constraintStart_toStartOf="@id/surface"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/surface">
 
             <EditText
@@ -144,15 +127,13 @@
             android:textSize="24sp"
             app:drawableStartCompat="@drawable/ic_room"
             app:drawableTint="@color/secondaryDarkColor"
-            app:layout_constraintEnd_toEndOf="@id/bedrooms"
             app:layout_constraintStart_toStartOf="@id/bedrooms"
-            app:layout_constraintTop_toBottomOf="@id/new_detail_title" />
+            app:layout_constraintTop_toBottomOf="@id/description_layout" />
 
         <NumberPicker
             android:id="@+id/rooms_picker"
             android:layout_width="wrap_content"
             android:layout_height="64dp"
-            app:layout_constraintEnd_toEndOf="@id/rooms"
             app:layout_constraintStart_toStartOf="@id/rooms"
             app:layout_constraintTop_toBottomOf="@id/rooms" />
 
@@ -171,15 +152,14 @@
             app:drawableStartCompat="@drawable/ic_bathroom"
             app:drawableTint="@color/secondaryDarkColor"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/location"
             app:layout_constraintTop_toBottomOf="@id/surface_layout" />
 
         <NumberPicker
             android:id="@+id/bathrooms_picker"
             android:layout_width="wrap_content"
             android:layout_height="64dp"
-            app:layout_constraintEnd_toEndOf="@id/bathrooms"
-            app:layout_constraintStart_toStartOf="@id/bathrooms"
+            android:layout_marginStart="16dp"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/bathrooms" />
 
         <TextView
@@ -187,7 +167,7 @@
             style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginBottom="4dp"
             android:drawablePadding="16dp"
             android:text="Bedrooms"
@@ -195,39 +175,20 @@
             android:textSize="24sp"
             app:drawableStartCompat="@drawable/ic_bedroom"
             app:drawableTint="@color/secondaryDarkColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/location"
+            app:layout_constraintStart_toEndOf="@id/bathrooms"
             app:layout_constraintTop_toTopOf="@id/bathrooms" />
 
         <NumberPicker
             android:id="@+id/bedrooms_picker"
             android:layout_width="wrap_content"
             android:layout_height="64dp"
-            app:layout_constraintEnd_toEndOf="@id/bedrooms"
             app:layout_constraintStart_toStartOf="@id/bedrooms"
             app:layout_constraintTop_toBottomOf="@id/bedrooms" />
-
-        <TextView
-            android:id="@+id/location"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="4dp"
-            android:drawablePadding="16dp"
-            android:text="Location"
-            android:textColor="@color/primaryDarkColor"
-            android:textSize="24sp"
-            app:drawableStartCompat="@drawable/ic_location"
-            app:drawableTint="@color/secondaryDarkColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bedrooms_picker" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/location_layout"
             style="@style/Widget.Design.TextInputLayout"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="4dp"
@@ -241,9 +202,9 @@
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryLightColor"
-            app:layout_constraintEnd_toEndOf="@id/location"
-            app:layout_constraintStart_toStartOf="@id/location"
-            app:layout_constraintTop_toBottomOf="@id/location">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/bedrooms"
+            app:layout_constraintTop_toTopOf="@id/rooms">
 
             <EditText
                 android:id="@+id/new_location_edit_text"
@@ -261,7 +222,7 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="64dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:text="Add new media"
             android:textColor="@color/primaryDarkColor"
             android:textSize="16sp"
@@ -270,14 +231,15 @@
             app:layout_constraintTop_toBottomOf="@id/location_layout" />
 
         <LinearLayout
+            android:id="@+id/rv_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/new_media_button"
-            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginVertical="8dp"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginHorizontal="64dp"
-            android:layout_marginVertical="32dp"
-            android:orientation="horizontal">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/new_media_button">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/house_media_rv_detail"
@@ -288,7 +250,6 @@
                 tools:listitem="@layout/media_rv_item" />
 
         </LinearLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

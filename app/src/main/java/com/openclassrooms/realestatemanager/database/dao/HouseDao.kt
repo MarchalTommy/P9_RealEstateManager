@@ -18,6 +18,9 @@ interface HouseDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAgent(agent: Agent)
 
+    @Query("SELECT * FROM house WHERE houseId = :houseId")
+    suspend fun getHouseWithId(houseId: Int): House
+
     @Query("SELECT * FROM house WHERE addressId = :addressId")
     suspend fun getHouseOfAddress(addressId: Int): List<House>
 
@@ -31,7 +34,7 @@ interface HouseDao {
     suspend fun getAllHouses(): List<House>
 
     @Query("SELECT * FROM address WHERE houseId = :houseId")
-    suspend fun getAddressFromHouse(houseId: Int): List<Address>
+    suspend fun getAddressFromHouse(houseId: Int): Address
 
     @Transaction
     @Query("SELECT * FROM house WHERE houseId = :houseId")
