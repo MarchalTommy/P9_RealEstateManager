@@ -14,14 +14,10 @@ data class Address(
     val houseId: Int
 ) {
     override fun toString(): String {
-        if (complement.equals("")) {
-            val string = "${way},\n${zip} $city"
-            return string
+        return if (complement == "") {
+            "$way,\n$zip $city"
         } else {
-            val string = "${way},\n${complement}\n${zip} $city"
-            return string
+            "$way,\n$complement\n$zip $city"
         }
-
-
     }
 }

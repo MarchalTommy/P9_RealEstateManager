@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "433125925972",
+    "project_id": "zinc-conduit-321806",
+    "storage_bucket": "zinc-conduit-321806.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:433125925972:android:aa476d3378747ddb14f9c1",
+        "android_client_info": {
+          "package_name": "com.openclassrooms.realestatemanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "433125925972-hhtglm2fh0a8sv02njpg0s92mguu85dv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.openclassrooms.realestatemanager",
+            "certificate_hash": "f21a5be4a1033269d3d32ecc0cb69956a214cf69"
+          }
+        },
+        {
+          "client_id": "433125925972-v87c4gpurv2oobompjfjkjt88stjlkdf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSY3FEI2LunSxhfgak7UOK3lFrjdzvFg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "433125925972-v87c4gpurv2oobompjfjkjt88stjlkdf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

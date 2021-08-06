@@ -1,39 +1,30 @@
 package com.openclassrooms.realestatemanager.ui
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import com.openclassrooms.realestatemanager.EstateApplication
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.Utils
-import com.openclassrooms.realestatemanager.database.EstateDatabase
-import com.openclassrooms.realestatemanager.database.entities.Address
-import com.openclassrooms.realestatemanager.database.entities.Agent
-import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding
 import com.openclassrooms.realestatemanager.ui.detail.DetailFragment
 import com.openclassrooms.realestatemanager.ui.mainList.ListFragment
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
+import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val database: EstateDatabase by lazy {
-        EstateDatabase.getInstance(this)
+    private val houseViewModel: HouseViewModel by viewModels {
+        HouseViewModelFactory((application as EstateApplication).repository)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        prepopulateRoomDB()
-
-
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -77,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                 true
             }
             R.id.edit -> {
-                // TODO: find a way to get House here to send it to the other fragment as argument
+                // TODO: find a way to get House here to send it to the other fragment as argument. Event ?
 //                if (Utils.isTablet(this) || Utils.isLandscape(this)) {
 //                    supportFragmentManager.beginTransaction()
 //                        .replace(R.id.second_fragment_twopane, EditItemFragment())
@@ -95,71 +86,5 @@ class MainActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    // Room prepopulation
-    private fun prepopulateRoomDB() {
-
-        val addresses = listOf(
-            Address(1, "42 Infinite Avenue", "", 42000, "UniverseLand", 1),
-            Address(2, "987 Landlord Street", "", 75345, "PlzHelpMeCity", 3),
-            Address(3, "123 NoImagination Street", "", 86487, "Imagination", 4),
-            Address(4, "456 Blerg rd", "", 34285, "NoIdeaCity", 2),
-            Address(
-                5,
-                "404 Unknown Avenue",
-                "404th floor, no lift.",
-                24874,
-                "PageNotFound",
-                5
-            )
-        )
-        val agents = listOf(
-            Agent(1, "Josh", "0601020304", "Josh.Joshy@gmail.com"),
-            Agent(2, "Jack", "0602030405", "Jack.Jacky@gmail.com"),
-            Agent(3, "Alexandra", "0610203040", "A.lexandra@hotmail.com")
-        )
-        val houses = listOf(
-            House(
-                1, 81450000, "Mansion", 1250, 21,
-                "", " ", "", true,
-                "27/05/2020", " ", 1, 1
-            ),
-
-            House(
-                2, 1325000, "Villa", 650, 12,
-                "", " ", "", true,
-                "27/05/2020", " ", 2, 4
-            ),
-
-            House(
-                3, 650000, "Villa", 350, 6,
-                "", " ", "", false,
-                "27/05/2020", "29/06/2021", 3, 2
-            ),
-
-            House(
-                4, 1000000, "Villa", 600, 8,
-                "", " ", "", true,
-                "27/05/2020", " ", 3, 3
-            ),
-
-            House(
-                5, 735000, "Villa", 250, 5,
-                "", " ", "", true,
-                "27/05/2020", " ", 1, 5
-            )
-        )
-
-        runBlocking {
-            addresses.forEach { database.houseDao.insertAddress(it) }
-            agents.forEach { database.houseDao.insertAgent(it) }
-            houses.forEach { database.houseDao.insertHouse(it) }
-            Log.d(TAG, "prepopulateRoomDB: Database populated !")
-        }
-
-//        lifecycleScope.launch(Dispatchers.IO) {
-//
-//        }
     }
 }

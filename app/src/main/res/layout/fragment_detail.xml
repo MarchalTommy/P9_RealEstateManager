@@ -21,6 +21,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="325dp"
+        android:clickable="true"
+        android:focusable="true"
         app:cardCornerRadius="32dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -30,7 +32,9 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true">
 
             <TextView
                 android:id="@+id/detail_type"
@@ -55,8 +59,8 @@
                 android:text="42 Avenue Vide, 25000, BESANCON"
                 android:textColor="@color/greyText"
                 android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/detail_fab"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_type" />
 
             <TextView
@@ -67,22 +71,24 @@
                 android:layout_marginTop="4dp"
                 android:fontFamily="sans-serif-condensed-light"
                 android:text="$1.285.000"
-                android:textStyle="bold"
                 android:textColor="@color/secondaryColor"
                 android:textSize="24sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_address" />
 
-            <com.airbnb.epoxy.EpoxyRecyclerView
+            <com.airbnb.epoxy.Carousel
                 android:id="@+id/detail_data_rv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
+                android:clickable="true"
+                android:focusable="true"
                 app:itemSpacing="16dp"
-                tools:listitem="@layout/model_detail_size"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/detail_address" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail_address"
+                tools:listitem="@layout/model_detail_size" />
 
             <TextView
                 android:id="@+id/detail_description"
@@ -115,16 +121,21 @@ tout refaire depuis le début."
                 app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/detail_fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                android:id="@+id/detail_fab"
                 android:layout_marginTop="16dp"
-                app:rippleColor="@color/secondaryDarkColor"
+                android:layout_marginEnd="24dp"
+                android:clickable="true"
                 android:contentDescription="Click to see location"
+                android:focusable="true"
+                android:foregroundGravity="center"
                 android:src="@drawable/twotone_location_24dp"
+                app:backgroundTint="@color/secondaryColor"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:maxImageSize="24dp"
+                app:rippleColor="@color/secondaryDarkColor" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

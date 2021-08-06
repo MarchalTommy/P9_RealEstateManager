@@ -8,24 +8,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.openclassrooms.realestatemanager.R
+import com.openclassrooms.realestatemanager.EstateApplication
 import com.openclassrooms.realestatemanager.Utils
-import com.openclassrooms.realestatemanager.database.EstateDatabase
-import com.openclassrooms.realestatemanager.database.dao.HouseDao
 import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
-import com.openclassrooms.realestatemanager.ui.detail.DetailFragment
+import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
+import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeout
 
 class ListFragment : Fragment() {
 
+    private val houseViewModel: HouseViewModel by viewModels{
+        HouseViewModelFactory((this.activity?.application as EstateApplication).repository)
+    }
+
     private lateinit var recyclerView: RecyclerView
-    private lateinit var dao: HouseDao
     private lateinit var thisContext: Context
     private lateinit var housesAndAddress: List<HouseAndAddress>
 
@@ -44,8 +47,6 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         thisContext = this.requireContext()
-
-        dao = EstateDatabase.getInstance(thisContext).houseDao
         recyclerView = binding.mainRecycler
 
         getLocalHouses()
@@ -60,7 +61,7 @@ class ListFragment : Fragment() {
         val job = lifecycleScope.launch(Dispatchers.IO) {
             Log.d(TAG, "getLocalHouses: Room call started, now fetching houses...")
             withTimeout(3000L) {
-                housesAndAddress = dao.getAllHousesAndAddresses()
+//                housesAndAddress = houseViewModel.getAllHousesAndAddresses()
             }
         }
 
@@ -84,11 +85,11 @@ class ListFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
             if (Utils.isLandscape(thisContext)) {
                 parentFragmentManager.beginTransaction()
-                    .add(R.id.second_fragment_twopane, DetailFragment(dao.getHouseWithId(houseId)))
+//                    .add(R.id.second_fragment_twopane, DetailFragment(houseViewModel.getHouseWithId(houseId)))
                     .commit()
             } else {
                 parentFragmentManager.beginTransaction()
-                    .add(R.id.main_fragment_portrait, DetailFragment(dao.getHouseWithId(houseId)))
+//                    .add(R.id.main_fragment_portrait, DetailFragment(houseViewModel.getHouseWithId(houseId)))
                     .commit()
             }
         }

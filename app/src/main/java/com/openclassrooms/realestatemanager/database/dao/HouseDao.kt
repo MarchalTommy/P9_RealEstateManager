@@ -5,9 +5,13 @@ import com.openclassrooms.realestatemanager.database.entities.Address
 import com.openclassrooms.realestatemanager.database.entities.Agent
 import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface HouseDao {
+
+    @Query("DELETE FROM house")
+    suspend fun deleteAll()
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertHouse(house: House)
@@ -19,10 +23,10 @@ interface HouseDao {
     suspend fun insertAgent(agent: Agent)
 
     @Query("SELECT * FROM house WHERE houseId = :houseId")
-    suspend fun getHouseWithId(houseId: Int): House
+    fun getHouseWithId(houseId: Int): Flow<House>
 
     @Query("SELECT * FROM house WHERE addressId = :addressId")
-    suspend fun getHouseOfAddress(addressId: Int): List<House>
+    fun getHouseOfAddress(addressId: Int): Flow<List<House>>
 
     @Query("SELECT * FROM House WHERE agentId = :agentId")
     suspend fun getHousesOfAgent(agentId: Int): List<House>
@@ -30,17 +34,20 @@ interface HouseDao {
     @Query("SELECT * FROM house WHERE type = :type")
     suspend fun getHouseOfType(type: String): List<House>
 
+    @Query("SELECT * FROM agent WHERE id = :agentId")
+    fun getAgent(agentId: Int): Flow<Agent>
+
     @Query("SELECT * FROM house")
-    suspend fun getAllHouses(): List<House>
+    fun getAllHouses(): Flow<List<House>>
 
     @Query("SELECT * FROM address WHERE houseId = :houseId")
-    suspend fun getAddressFromHouse(houseId: Int): Address
+    fun getAddressFromHouse(houseId: Int): Flow<Address>
 
     @Transaction
     @Query("SELECT * FROM house WHERE houseId = :houseId")
-    suspend fun getHouseWithAddress(houseId: Int): List<HouseAndAddress>
+    fun getHouseWithAddress(houseId: Int): Flow<List<HouseAndAddress>>
 
     @Transaction
     @Query("SELECT * FROM house")
-    suspend fun getAllHousesAndAddresses(): List<HouseAndAddress>
+    fun getAllHousesAndAddresses(): Flow<List<HouseAndAddress>>
 }

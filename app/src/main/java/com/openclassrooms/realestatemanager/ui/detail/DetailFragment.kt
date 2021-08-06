@@ -6,23 +6,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.airbnb.epoxy.EpoxyRecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.openclassrooms.realestatemanager.EstateApplication
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.database.EstateDatabase
-import com.openclassrooms.realestatemanager.database.dao.HouseDao
 import com.openclassrooms.realestatemanager.database.entities.Address
 import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.epoxy.DetailDataListEpoxyController
+import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
+import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 
 class DetailFragment(houseClicked: House?) : Fragment() {
 
+    private val houseViewModel: HouseViewModel by viewModels{
+        HouseViewModelFactory((this.activity?.application as EstateApplication).repository)
+    }
+
     private var mHouse: House? = houseClicked
     private lateinit var address: Address
-    private lateinit var dao: HouseDao
     private lateinit var thisContext: Context
 
     private var _binding: FragmentDetailBinding? = null
@@ -43,7 +48,6 @@ class DetailFragment(houseClicked: House?) : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         thisContext = this.requireContext()
         epoxyController = DetailDataListEpoxyController(thisContext)
-        dao = EstateDatabase.getInstance(thisContext).houseDao
 
         getDBData()
 
@@ -53,12 +57,14 @@ class DetailFragment(houseClicked: House?) : Fragment() {
 
         binding.detailDescription.text = mHouse?.description
         binding.detailAddress.text = address.toString()
+
+        fabStaticMap()
     }
 
     private fun getDBData() {
         runBlocking {
             withTimeout(1000L) {
-                address = dao.getAddressFromHouse(mHouse!!.houseId)
+//                address = houseViewModel.getAddressFromHouse(mHouse!!.houseId)
             }
         }
     }
