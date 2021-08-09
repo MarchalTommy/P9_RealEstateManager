@@ -7,8 +7,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class Picture (
     @PrimaryKey
-    val pictureId: Int,
-    val link: Uri,
+    val uri: String,
     val title: String,
     val houseId: Int
 )

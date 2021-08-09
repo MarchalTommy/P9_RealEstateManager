@@ -47,12 +47,14 @@ class EditItemFragment(private val house: House) : Fragment() {
             .observe(viewLifecycleOwner, Observer { houseAndAddress ->
                 val house = houseAndAddress[0].house
                 val address = houseAndAddress[0].address
-                binding.bathroomsPicker.value = house.nbrRooms / 4
-                binding.bedroomsPicker.value = house.nbrRooms / 3
-                binding.roomsPicker.value = house.nbrRooms
+                binding.bathroomsPicker.value = house.nbrBathrooms?:0
+                binding.bedroomsPicker.value = house.nbrBedrooms?:0
+                binding.roomsPicker.value = house.nbrRooms?:0
                 binding.surfaceEditText.setText(house.size)
                 binding.newDescriptionEditText.setText(house.description)
-                binding.newLocationEditText.setText(address.toString())
+                binding.locationWayEditText.setText(address.way)
+                binding.locationCityEditText.setText(address.city)
+                binding.locationZipEditText.setText(address.zip)
             })
 
         // SETTING BASE LAYOUT
@@ -81,9 +83,10 @@ class EditItemFragment(private val house: House) : Fragment() {
 //                binding.roomsPicker.value
 //            }
 
-            val house: House = House(house.houseId, house.price, house.type, "$binding.surfaceEditText.text".toInt(),
-                binding.roomsPicker.value, "$binding.newDescriptionEditText.text", "hah",
-                true, house.dateEntryOnMarket, house.dateSell, house.agentId, house.addressId)
+            val house: House = House(house.price, house.type, "$binding.surfaceEditText.text".toInt(),
+                binding.roomsPicker.value,binding.bedroomsPicker.value, binding.bathroomsPicker.value,
+                "$binding.newDescriptionEditText.text",true, house.dateEntryOnMarket,
+                house.dateSell, house.agentId, house.addressId)
 
             // TODO
 //            houseViewModel.updateHouse(house)

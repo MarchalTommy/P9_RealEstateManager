@@ -17,8 +17,8 @@
             android:layout_margin="16dp"
             android:src="@drawable/twotone_add_task_black_24dp"
             app:backgroundTint="@color/secondaryColor"
-            app:layout_constraintTop_toBottomOf="@id/rv_layout"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rv_layout"
             app:tint="@android:color/white" />
 
         <TextView
@@ -28,10 +28,88 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="16dp"
             android:layout_marginStart="16dp"
-            android:text="Add a new estate :"
+            android:text="Edit this estate :"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/details_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Details : "
+            android:textColor="@color/greyText"
+            android:textSize="24sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/new_description_title" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/price_layout"
+            style="@style/Widget.Design.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="32dp"
+            android:hint="Price of the estate"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/primaryColor"
+            app:boxStrokeWidth="3dp"
+            app:boxStrokeWidthFocused="1dp"
+            app:expandedHintEnabled="true"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:hintTextColor="@color/secondaryColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/details_title">
+
+            <EditText
+                android:id="@+id/price_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="none"
+                android:importantForAutofill="no"
+                android:inputType="textNoSuggestions"
+                android:maxHeight="50dp"
+                android:minLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/type_layout"
+            style="@style/Widget.Design.TextInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="32dp"
+            android:hint="Type (mansion, villa, appartment, etc)"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/primaryColor"
+            app:boxStrokeWidth="3dp"
+            app:boxStrokeWidthFocused="1dp"
+            app:expandedHintEnabled="true"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:hintTextColor="@color/secondaryColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/price_layout">
+
+            <EditText
+                android:id="@+id/type_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="none"
+                android:importantForAutofill="no"
+                android:inputType="textNoSuggestions"
+                android:maxHeight="50dp"
+                android:minLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/description_layout"
@@ -51,7 +129,7 @@
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryColor"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/new_description_title">
+            app:layout_constraintTop_toBottomOf="@id/type_layout">
 
             <EditText
                 android:id="@+id/new_description_edit_text"
@@ -75,10 +153,8 @@
             android:layout_marginBottom="4dp"
             android:drawablePadding="16dp"
             android:text="Surface"
-            android:textSize="24sp"
             android:textColor="@color/greyText"
-            app:drawableStartCompat="@drawable/ic_surface"
-            app:drawableTint="@color/primaryColor"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/description_layout" />
 
@@ -124,8 +200,6 @@
             android:text="Rooms"
             android:textColor="@color/greyText"
             android:textSize="24sp"
-            app:drawableStartCompat="@drawable/ic_room"
-            app:drawableTint="@color/primaryColor"
             app:layout_constraintStart_toStartOf="@id/bedrooms"
             app:layout_constraintTop_toBottomOf="@id/description_layout" />
 
@@ -148,8 +222,6 @@
             android:text="Bathrooms"
             android:textColor="@color/greyText"
             android:textSize="24sp"
-            app:drawableStartCompat="@drawable/ic_bathroom"
-            app:drawableTint="@color/primaryColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/surface_layout" />
 
@@ -172,8 +244,6 @@
             android:text="Bedrooms"
             android:textColor="@color/greyText"
             android:textSize="24sp"
-            app:drawableStartCompat="@drawable/ic_bedroom"
-            app:drawableTint="@color/primaryColor"
             app:layout_constraintStart_toEndOf="@id/bathrooms"
             app:layout_constraintTop_toTopOf="@id/bathrooms" />
 
@@ -184,15 +254,27 @@
             app:layout_constraintStart_toStartOf="@id/bedrooms"
             app:layout_constraintTop_toBottomOf="@id/bedrooms" />
 
+        <TextView
+            android:id="@+id/address_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
+            android:text="Address :"
+            android:textColor="@color/greyText"
+            android:textSize="24sp"
+            app:layout_constraintStart_toEndOf="@id/bedrooms"
+            app:layout_constraintTop_toBottomOf="@id/description_layout" />
+
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/location_layout"
+            android:id="@+id/location_way_layout"
             style="@style/Widget.Design.TextInputLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="32dp"
-            android:hint="Location of the house"
+            android:hint="Way"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
             app:boxStrokeWidth="3dp"
@@ -202,17 +284,113 @@
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryColor"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/bedrooms"
-            app:layout_constraintTop_toTopOf="@id/rooms">
+            app:layout_constraintStart_toStartOf="@id/address_title"
+            app:layout_constraintTop_toBottomOf="@id/address_title">
 
             <EditText
-                android:id="@+id/new_location_edit_text"
+                android:id="@+id/location_way_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="none"
                 android:importantForAutofill="no"
-                android:inputType="textMultiLine"
-                android:minLines="5" />
+                android:inputType="text"
+                android:minLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/location_complement_layout"
+            style="@style/Widget.Design.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="32dp"
+            android:hint="Complement"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/primaryColor"
+            app:boxStrokeWidth="3dp"
+            app:boxStrokeWidthFocused="1dp"
+            app:expandedHintEnabled="true"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:hintTextColor="@color/secondaryColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/address_title"
+            app:layout_constraintTop_toBottomOf="@id/location_way_layout">
+
+            <EditText
+                android:id="@+id/location_complement_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="none"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:minLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/location_zip_layout"
+            style="@style/Widget.Design.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="32dp"
+            android:hint="Zip code"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/primaryColor"
+            app:boxStrokeWidth="3dp"
+            app:boxStrokeWidthFocused="1dp"
+            app:expandedHintEnabled="true"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:hintTextColor="@color/secondaryColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/address_title"
+            app:layout_constraintTop_toBottomOf="@id/location_complement_layout">
+
+            <EditText
+                android:id="@+id/location_zip_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="none"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal"
+                android:minLines="1" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/location_city_layout"
+            style="@style/Widget.Design.TextInputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="32dp"
+            android:hint="City"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/primaryColor"
+            app:boxStrokeWidth="3dp"
+            app:boxStrokeWidthFocused="1dp"
+            app:expandedHintEnabled="true"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:hintTextColor="@color/secondaryColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/address_title"
+            app:layout_constraintTop_toBottomOf="@id/location_zip_layout">
+
+            <EditText
+                android:id="@+id/location_city_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="none"
+                android:importantForAutofill="no"
+                android:inputType="text"
+                android:minLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -221,12 +399,14 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="64dp"
+            android:layout_marginStart="64dp"
             android:layout_marginTop="16dp"
             android:text="Add new media"
             android:textColor="@color/primaryColor"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="@id/location_layout"
-            app:layout_constraintTop_toBottomOf="@id/location_layout" />
+            app:layout_constraintEnd_toStartOf="@id/remove_media_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/location_city_layout" />
 
         <Button
             android:id="@+id/remove_media_button"
@@ -234,11 +414,13 @@
             android:layout_width="wrap_content"
             android:layout_height="64dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="64dp"
             android:text="Remove a media"
             android:textColor="@color/primaryColor"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@id/location_layout"
-            app:layout_constraintTop_toBottomOf="@id/location_layout" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/new_media_button"
+            app:layout_constraintTop_toBottomOf="@id/location_city_layout" />
 
         <LinearLayout
             android:id="@+id/rv_layout"

@@ -17,12 +17,10 @@ import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.epoxy.DetailDataListEpoxyController
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withTimeout
 
 class DetailFragment(houseClicked: House?) : Fragment() {
 
-    private val houseViewModel: HouseViewModel by viewModels{
+    private val houseViewModel: HouseViewModel by viewModels {
         HouseViewModelFactory((this.activity?.application as EstateApplication).repository)
     }
 
@@ -56,17 +54,17 @@ class DetailFragment(houseClicked: House?) : Fragment() {
         epoxyRecyclerView?.setControllerAndBuildModels(epoxyController)
 
         binding.detailDescription.text = mHouse?.description
-        binding.detailAddress.text = address.toString()
 
-        fabStaticMap()
+
+
     }
 
     private fun getDBData() {
-        runBlocking {
-            withTimeout(1000L) {
-//                address = houseViewModel.getAddressFromHouse(mHouse!!.houseId)
-            }
-        }
+        houseViewModel.getAddressFromHouse(mHouse!!.houseId).observe(viewLifecycleOwner, {
+            address = it
+            binding.detailAddress.text = address.toString()
+            fabStaticMap()
+        })
     }
 
     private fun fabStaticMap() {

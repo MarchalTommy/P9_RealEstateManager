@@ -13,24 +13,26 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.openclassrooms.realestatemanager.EstateApplication
+import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.Utils
+import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
+import com.openclassrooms.realestatemanager.ui.detail.DetailFragment
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeout
 
 class ListFragment : Fragment() {
 
-    private val houseViewModel: HouseViewModel by viewModels{
+    private val houseViewModel: HouseViewModel by viewModels {
         HouseViewModelFactory((this.activity?.application as EstateApplication).repository)
     }
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var thisContext: Context
-    private lateinit var housesAndAddress: List<HouseAndAddress>
+    private var housesAndAddress: ArrayList<HouseAndAddress> = ArrayList()
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
@@ -58,21 +60,17 @@ class ListFragment : Fragment() {
     }
 
     private fun getLocalHouses() {
-        val job = lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.Main) {
             Log.d(TAG, "getLocalHouses: Room call started, now fetching houses...")
-            withTimeout(3000L) {
-//                housesAndAddress = houseViewModel.getAllHousesAndAddresses()
-            }
+
+            houseViewModel.allHousesWithAddress.observe(viewLifecycleOwner, {
+                housesAndAddress = it as ArrayList<HouseAndAddress>
+
+                prepareAdapter(housesAndAddress)
+            })
         }
 
-        lifecycleScope.launch(Dispatchers.Main) {
-            job.join()
-            Log.d(
-                TAG,
-                "getLocalHouses: Houses fetched, now preparing the RecyclerView ! ${housesAndAddress.size}"
-            )
-            prepareAdapter(housesAndAddress)
-        }
+
     }
 
     private fun prepareAdapter(dataSet: List<HouseAndAddress>) {
@@ -82,16 +80,23 @@ class ListFragment : Fragment() {
     }
 
     private fun listOnClick(houseId: Int) {
-        lifecycleScope.launch(Dispatchers.Main) {
-            if (Utils.isLandscape(thisContext)) {
-                parentFragmentManager.beginTransaction()
-//                    .add(R.id.second_fragment_twopane, DetailFragment(houseViewModel.getHouseWithId(houseId)))
-                    .commit()
-            } else {
-                parentFragmentManager.beginTransaction()
-//                    .add(R.id.main_fragment_portrait, DetailFragment(houseViewModel.getHouseWithId(houseId)))
-                    .commit()
+        lateinit var houseClicked: House
+        houseViewModel.getHouseWithId(houseId).observe(viewLifecycleOwner, {
+            houseClicked = it
+
+            lifecycleScope.launch(Dispatchers.Main) {
+                if (Utils.isLandscape(thisContext)) {
+                    parentFragmentManager.beginTransaction()
+                        .add(R.id.second_fragment_twopane, DetailFragment(houseClicked))
+                        .commit()
+                } else {
+                    parentFragmentManager.beginTransaction()
+                        .add(R.id.main_fragment_portrait, DetailFragment(houseClicked))
+                        .commit()
+                }
             }
-        }
+        })
+
+
     }
 }

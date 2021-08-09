@@ -5,6 +5,7 @@ import com.openclassrooms.realestatemanager.database.dao.HouseDao
 import com.openclassrooms.realestatemanager.database.entities.Address
 import com.openclassrooms.realestatemanager.database.entities.Agent
 import com.openclassrooms.realestatemanager.database.entities.House
+import com.openclassrooms.realestatemanager.database.entities.Picture
 import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
 import kotlinx.coroutines.flow.Flow
 
@@ -38,12 +39,16 @@ class HouseRepository(private val houseDao: HouseDao) {
         houseDao.insertHouse(house)
     }
 
-    fun insertAddress(address: Address) {
-        insertAddress(address)
+    suspend fun insertAddress(address: Address) {
+        houseDao.insertAddress(address)
     }
 
-    fun insertAgent(agent: Agent) {
-        insertAgent(agent)
+    suspend fun insertAgent(agent: Agent) {
+        houseDao.insertAgent(agent)
+    }
+
+    suspend fun insertPicture(picture: Picture) {
+        houseDao.insertPicture(picture)
     }
     // endregion INSERTS
 

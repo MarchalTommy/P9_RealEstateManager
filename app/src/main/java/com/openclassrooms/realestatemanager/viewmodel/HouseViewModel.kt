@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.openclassrooms.realestatemanager.database.entities.Address
 import com.openclassrooms.realestatemanager.database.entities.Agent
 import com.openclassrooms.realestatemanager.database.entities.House
+import com.openclassrooms.realestatemanager.database.entities.Picture
 import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
 import com.openclassrooms.realestatemanager.repository.HouseRepository
 import kotlinx.coroutines.launch
@@ -46,6 +47,10 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
 
     fun insertAgent(agent: Agent) = viewModelScope.launch {
         repository.insertAgent(agent)
+    }
+
+    fun insertPicture(picture: Picture) = viewModelScope.launch {
+        repository.insertPicture(picture)
     }
 
     // endregion INSERTS

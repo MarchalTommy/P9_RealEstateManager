@@ -4,6 +4,7 @@ import androidx.room.*
 import com.openclassrooms.realestatemanager.database.entities.Address
 import com.openclassrooms.realestatemanager.database.entities.Agent
 import com.openclassrooms.realestatemanager.database.entities.House
+import com.openclassrooms.realestatemanager.database.entities.Picture
 import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
 import kotlinx.coroutines.flow.Flow
 
@@ -21,6 +22,9 @@ interface HouseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAgent(agent: Agent)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertPicture(picture: Picture)
 
     @Query("SELECT * FROM house WHERE houseId = :houseId")
     fun getHouseWithId(houseId: Int): Flow<House>

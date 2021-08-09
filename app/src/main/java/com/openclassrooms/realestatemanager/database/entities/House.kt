@@ -8,18 +8,19 @@ import kotlinx.parcelize.Parcelize
 @Entity
 @Parcelize
 data class House(
-        @PrimaryKey
-        val houseId: Int,
-        val price: Int,
-        val type: String,
-        val size: Int,
-        val nbrRooms: Int,
-        val nbrBedrooms: Int,
-        val nbrBathrooms: Int,
-        val description: String,
-        val stillAvailable: Boolean,
-        val dateEntryOnMarket: String,
-        val dateSell: String,
-        val agentId: Int,
-        val addressId: Int
-        ) : Parcelable
+    var price: Int,
+    var type: String,
+    var size: Int,
+    var nbrRooms: Int?,
+    var nbrBedrooms: Int?,
+    var nbrBathrooms: Int?,
+    var description: String?,
+    var stillAvailable: Boolean,
+    var dateEntryOnMarket: String,
+    var dateSell: String,
+    val agentId: Int,
+    var addressId: Int
+) : Parcelable {
+    @PrimaryKey(autoGenerate = true)
+    var houseId: Int = 0
+}

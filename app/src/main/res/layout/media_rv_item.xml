@@ -19,6 +19,7 @@
 
         <ImageView
             android:id="@+id/media_pic"
+            android:scaleType="centerCrop"
             android:layout_width="124dp"
             android:layout_height="124dp"
             app:layout_constraintStart_toStartOf="parent"
