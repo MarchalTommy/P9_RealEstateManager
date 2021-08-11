@@ -11,4 +11,8 @@ data class Agent (
         ) {
         @PrimaryKey(autoGenerate = true)
         var id: Int = 0
+
+        override fun toString(): String {
+                return "Agent in charge : $name\nContact : $mail"
+        }
 }

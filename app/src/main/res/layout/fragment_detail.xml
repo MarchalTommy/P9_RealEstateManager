@@ -77,18 +77,22 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_address" />
 
-            <com.airbnb.epoxy.Carousel
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/detail_data_rv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_height="64dp"
+                android:layout_marginTop="48dp"
                 android:clickable="true"
+                android:clipToPadding="false"
                 android:focusable="true"
-                app:itemSpacing="16dp"
+                android:orientation="horizontal"
+                android:paddingStart="45dp"
+                android:paddingEnd="45dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_address"
-                tools:listitem="@layout/model_detail_size" />
+                tools:listitem="@layout/model_detail_data" />
 
             <TextView
                 android:id="@+id/detail_description"

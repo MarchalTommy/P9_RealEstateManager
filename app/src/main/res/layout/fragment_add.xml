@@ -20,41 +20,30 @@
             app:backgroundTint="@color/secondaryColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rv_layout"
+            app:maxImageSize="24dp"
             app:tint="@android:color/white" />
-
-        <TextView
-            android:id="@+id/add_title"
-            style="@style/TextAppearance.MaterialComponents.Headline4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="16dp"
-            android:layout_marginStart="16dp"
-            android:text="Add a new estate :"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/description_layout"
-            style="@style/Widget.Design.TextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
             android:hint="Add a description here"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
-            app:boxStrokeWidth="3dp"
-            app:boxStrokeWidthFocused="1dp"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="2dp"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryColor"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/add_title">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/new_description_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -66,7 +55,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/details_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,21 +65,22 @@
             android:textColor="@color/greyText"
             android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/bathrooms_picker" />
+            app:layout_constraintTop_toBottomOf="@id/bathrooms_layout" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/price_layout"
-            style="@style/Widget.Design.TextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
             android:hint="Price of the estate"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
-            app:boxStrokeWidth="3dp"
-            app:boxStrokeWidthFocused="1dp"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:errorEnabled="true"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
@@ -99,7 +89,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/details_title">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/price_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -113,26 +103,27 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/type_layout"
-            style="@style/Widget.Design.TextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
             android:hint="Type (mansion, villa, appartment, etc)"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
-            app:boxStrokeWidth="3dp"
-            app:boxStrokeWidthFocused="1dp"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="2dp"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
+            app:errorEnabled="true"
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/price_layout">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/type_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -144,38 +135,37 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/surface"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="64dp"
             android:text="Surface"
             android:textColor="@color/greyText"
             android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="@id/rooms"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toStartOf="@id/bathrooms"
             app:layout_constraintTop_toBottomOf="@id/description_layout" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/surface_layout"
-            style="@style/Widget.Design.TextInputLayout"
-            android:layout_width="80dp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="124dp"
             android:layout_height="wrap_content"
             android:hint="Surface"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
-            app:boxStrokeWidth="3dp"
+            app:boxStrokeWidth="1dp"
             app:boxStrokeWidthFocused="2dp"
             app:expandedHintEnabled="true"
+            app:errorEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryColor"
-            app:layout_constraintStart_toStartOf="@id/surface"
+            app:layout_constraintStart_toStartOf="@id/bathrooms"
             app:layout_constraintTop_toBottomOf="@id/surface">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/surface_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -187,62 +177,133 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <TextView
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/rooms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
             android:layout_marginEnd="16dp"
             android:text="Rooms"
             android:textColor="@color/greyText"
             android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/surface"
+            app:layout_constraintStart_toStartOf="@id/bedrooms"
             app:layout_constraintTop_toTopOf="@id/surface" />
 
-        <NumberPicker
-            android:id="@+id/rooms_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="64dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/rooms_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="124dp"
+            android:layout_height="wrap_content"
+            android:hint="Rooms"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/primaryColor"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:expandedHintEnabled="true"
+            app:errorEnabled="true"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:hintTextColor="@color/secondaryColor"
             app:layout_constraintStart_toStartOf="@id/rooms"
-            app:layout_constraintTop_toBottomOf="@id/rooms" />
+            app:layout_constraintTop_toBottomOf="@id/surface">
 
-        <TextView
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/rooms_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="none"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:maxHeight="50dp"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/bathrooms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="64dp"
             android:text="Bathrooms"
             android:textColor="@color/greyText"
             android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@id/surface"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/bedrooms"
             app:layout_constraintTop_toBottomOf="@id/surface_layout" />
 
-        <NumberPicker
-            android:id="@+id/bathrooms_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="64dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/bathrooms_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="124dp"
+            android:layout_height="wrap_content"
+            android:hint="Surface"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/primaryColor"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:expandedHintEnabled="true"
+            app:errorEnabled="true"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:hintTextColor="@color/secondaryColor"
             app:layout_constraintStart_toStartOf="@id/bathrooms"
-            app:layout_constraintTop_toBottomOf="@id/bathrooms" />
+            app:layout_constraintTop_toBottomOf="@id/bathrooms">
 
-        <TextView
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/bathrooms_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="none"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:maxHeight="50dp"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/bedrooms"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
             android:text="Bedrooms"
             android:textColor="@color/greyText"
             android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@id/rooms"
+            app:layout_constraintStart_toStartOf="@id/bathrooms"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/bathrooms" />
 
-        <NumberPicker
-            android:id="@+id/bedrooms_picker"
-            android:layout_width="wrap_content"
-            android:layout_height="64dp"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/bedrooms_layout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="124dp"
+            android:layout_height="wrap_content"
+            android:hint="Surface"
+            app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/primaryColor"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="2dp"
+            app:expandedHintEnabled="true"
+            app:errorEnabled="true"
+            app:hintAnimationEnabled="true"
+            app:hintEnabled="true"
+            app:hintTextColor="@color/secondaryColor"
             app:layout_constraintStart_toStartOf="@id/bedrooms"
-            app:layout_constraintTop_toBottomOf="@id/bedrooms" />
+            app:layout_constraintTop_toBottomOf="@id/bedrooms">
 
-        <TextView
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/bedrooms_edit_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="none"
+                android:importantForAutofill="no"
+                android:inputType="number"
+                android:maxHeight="50dp"
+                android:singleLine="true" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textview.MaterialTextView
             android:id="@+id/address_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -256,49 +317,49 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/location_way_layout"
-            style="@style/Widget.Design.TextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
             android:hint="Way"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
-            app:boxStrokeWidth="3dp"
-            app:boxStrokeWidthFocused="1dp"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="2dp"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
+            app:errorEnabled="true"
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/address_title">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/location_way_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="none"
                 android:importantForAutofill="no"
-                android:inputType="text"
                 android:minLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/location_complement_layout"
-            style="@style/Widget.Design.TextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
             android:hint="Complement"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
-            app:boxStrokeWidth="3dp"
-            app:boxStrokeWidthFocused="1dp"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="2dp"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
@@ -307,7 +368,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/location_way_layout">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/location_complement_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -320,17 +381,18 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/location_zip_layout"
-            style="@style/Widget.Design.TextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
+            app:errorEnabled="true"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
             android:hint="Zip code"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
-            app:boxStrokeWidth="3dp"
-            app:boxStrokeWidthFocused="1dp"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="2dp"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
@@ -339,7 +401,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/location_complement_layout">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/location_zip_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -352,17 +414,18 @@
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/location_city_layout"
-            style="@style/Widget.Design.TextInputLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="16dp"
+            app:errorEnabled="true"
             android:layout_marginTop="4dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
             android:hint="City"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
-            app:boxStrokeWidth="3dp"
-            app:boxStrokeWidthFocused="1dp"
+            app:boxStrokeWidth="1dp"
+            app:boxStrokeWidthFocused="2dp"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
@@ -371,7 +434,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/location_zip_layout">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/location_city_edit_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

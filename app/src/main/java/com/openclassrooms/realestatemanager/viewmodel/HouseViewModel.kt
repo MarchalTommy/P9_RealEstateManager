@@ -12,7 +12,6 @@ import kotlinx.coroutines.launch
 class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
 
     // region GETTERS
-
     val allHouses: LiveData<List<House>> = repository.allHouses.asLiveData()
 
     val allHousesWithAddress: LiveData<List<HouseAndAddress>> =
@@ -33,10 +32,13 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
     fun getAgent(agentId: Int): LiveData<Agent> {
         return repository.getAgent(agentId).asLiveData()
     }
+
+    fun getPictures(houseId: Int): LiveData<List<Picture>> {
+        return repository.getPictures(houseId).asLiveData()
+    }
     // endregion GETTERS
 
     // region INSERTS
-
     fun insertHouse(house: House) = viewModelScope.launch {
         repository.insertHouse(house)
     }
@@ -52,7 +54,6 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
     fun insertPicture(picture: Picture) = viewModelScope.launch {
         repository.insertPicture(picture)
     }
-
     // endregion INSERTS
 
     // TODO : UPDATES FUN

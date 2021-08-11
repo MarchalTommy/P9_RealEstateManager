@@ -11,4 +11,11 @@
 
     </style>
 
+    <style name="ThemeDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog.Centered">
+        <item name="titleTextStyle">@android:color/white</item>
+        <item name="titleTextColor">@android:color/white</item>
+        <item name="colorOnBackground">@android:color/white</item>
+        <item name="backgroundColor">@android:color/transparent</item>
+    </style>
+
 </resources>

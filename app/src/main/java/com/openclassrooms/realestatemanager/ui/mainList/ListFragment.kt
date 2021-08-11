@@ -16,6 +16,7 @@ import com.openclassrooms.realestatemanager.EstateApplication
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.Utils
 import com.openclassrooms.realestatemanager.database.entities.House
+import com.openclassrooms.realestatemanager.database.entities.Picture
 import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.ui.detail.DetailFragment
@@ -33,6 +34,7 @@ class ListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var thisContext: Context
     private var housesAndAddress: ArrayList<HouseAndAddress> = ArrayList()
+    private var pictures: ArrayList<Picture> = ArrayList()
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
@@ -63,14 +65,12 @@ class ListFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
             Log.d(TAG, "getLocalHouses: Room call started, now fetching houses...")
 
-            houseViewModel.allHousesWithAddress.observe(viewLifecycleOwner, {
+            houseViewModel.allHousesWithAddress.observe(viewLifecycleOwner, { it ->
                 housesAndAddress = it as ArrayList<HouseAndAddress>
 
                 prepareAdapter(housesAndAddress)
             })
         }
-
-
     }
 
     private fun prepareAdapter(dataSet: List<HouseAndAddress>) {

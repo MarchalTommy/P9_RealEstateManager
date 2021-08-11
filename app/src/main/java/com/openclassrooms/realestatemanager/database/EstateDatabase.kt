@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.database
 
 import android.content.Context
+import android.net.Uri
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -67,13 +68,38 @@ abstract class EstateDatabase : RoomDatabase() {
 
         suspend fun populateDatabase(houseDao: HouseDao) {
             houseDao.deleteAll()
+            val uriMansion: String = Uri.parse("android.resource://com.openclassrooms.realestatemanager/drawable/mansion").toString()
+            val uriVilla1: String = Uri.parse("android.resource://com.openclassrooms.realestatemanager/drawable/modern_villa").toString()
+            val uriVilla2: String = Uri.parse("android.resource://com.openclassrooms.realestatemanager/drawable/rich_villa_pool").toString()
+            val uriVilla3: String = Uri.parse("android.resource://com.openclassrooms.realestatemanager/drawable/villa_pool").toString()
+            val uriVilla4: String = Uri.parse("android.resource://com.openclassrooms.realestatemanager/drawable/wooden_villa").toString()
+            val uriKitchen1: String = Uri.parse("android.resource://com.openclassrooms.realestatemanager/drawable/kitchen_01").toString()
+            val uriBathroom1: String = Uri.parse("android.resource://com.openclassrooms.realestatemanager/drawable/bathroom").toString()
+            val uriBedroom1: String = Uri.parse("android.resource://com.openclassrooms.realestatemanager/drawable/bedroom").toString()
+            val uriLiving1: String = Uri.parse("android.resource://com.openclassrooms.realestatemanager/drawable/living_r_1").toString()
+            val uriLiving2: String = Uri.parse("android.resource://com.openclassrooms.realestatemanager/drawable/living_r_2").toString()
+            val uriLiving3: String = Uri.parse("android.resource://com.openclassrooms.realestatemanager/drawable/living_r_3").toString()
+
+            val pictures = listOf(
+                Picture(uriMansion, "Huge Mansion", 1),
+                Picture(uriVilla1, "Beautiful Villa", 5),
+                Picture(uriVilla2, "Luxury Villa", 2),
+                Picture(uriVilla3, "Simple Villa", 3),
+                Picture(uriVilla4, "Pretty wooden Villa", 4),
+                Picture(uriKitchen1, "Kitchen", 1),
+                Picture(uriBathroom1, "Bathroom", 1),
+                Picture(uriBedroom1, "Bedroom", 1),
+                Picture(uriLiving1, "Living Room", 1),
+                Picture(uriLiving2, "Living Room", 2),
+                Picture(uriLiving3, "Living Room", 4)
+            )
 
             val addresses = listOf(
-                Address("42 Infinite Avenue", "", 42000, "UniverseLand", 1),
-                Address("987 Landlord Street", "", 75345, "PlzHelpMeCity", 3),
-                Address("123 NoImagination Street", "", 86487, "Imagination", 4),
-                Address("456 Blerg rd", "", 34285, "NoIdeaCity", 2),
-                Address("404 Unknown Avenue", "404th floor, no lift.", 24874, "PageNotFound", 5)
+                Address("13 Woodstone Dr", "", 70471, "Mandeville", 1),
+                Address("22358 Crane St", "", 70449, "Maurepas", 3),
+                Address("951 7th St", "", 70767, "Port Allen", 4),
+                Address("121 Pailet Dr", "", 70058, "Harvey", 2),
+                Address("137 Myia Ln", "", 70517, "Breaux Bridge", 5)
             )
             val agents = listOf(
                 Agent( "Josh", "0601020304", "Josh.Joshy@gmail.com"),
@@ -84,34 +110,35 @@ abstract class EstateDatabase : RoomDatabase() {
                 House(
                      81450000, "Mansion", 1250, 21,
                     8, 5, " ", true,
-                    "27/05/2020", " ", 1, 1
+                    "27/05/2020", " ", 1, 1, uriMansion
                 ),
 
                 House(
                      1325000, "Villa", 650, 12,
                     5, 3, " ", true,
-                    "27/05/2020", " ", 2, 4
+                    "27/05/2020", " ", 2, 4, uriVilla2
                 ),
 
                 House(
                      650000, "Villa", 350, 6,
                     2, 1, " ", false,
-                    "27/05/2020", "29/06/2021", 3, 2
+                    "27/05/2020", "29/06/2021", 3, 2, uriVilla3
                 ),
 
                 House(
                      1000000, "Villa", 600, 8,
                     3, 2, " ", true,
-                    "27/05/2020", " ", 3, 3
+                    "27/05/2020", " ", 3, 3, uriVilla4
                 ),
 
                 House(
                      735000, "Villa", 250, 5,
                     3, 1, " ", true,
-                    "27/05/2020", " ", 1, 5
+                    "27/05/2020", " ", 1, 5, uriVilla1
                 )
             )
 
+            pictures.forEach { houseDao.insertPicture(it)}
             addresses.forEach { houseDao.insertAddress(it) }
             agents.forEach { houseDao.insertAgent(it) }
             houses.forEach { houseDao.insertHouse(it) }

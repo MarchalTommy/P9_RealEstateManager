@@ -15,10 +15,14 @@ data class Address(
     var id: Int = 0
 
     override fun toString(): String {
-        return if (complement == "") {
+        return if (complement.isEmpty()) {
             "$way,\n$zip $city"
         } else {
             "$way,\n$complement\n$zip $city"
         }
+    }
+
+    fun toUrlReadyString(): String {
+        return way.replace(" ", "+") + "," + city.replace(" ", "+")
     }
 }

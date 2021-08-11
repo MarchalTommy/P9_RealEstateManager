@@ -6,6 +6,7 @@ import com.openclassrooms.realestatemanager.database.entities.Agent
 import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.database.entities.Picture
 import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
+import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndPicture
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -54,4 +55,10 @@ interface HouseDao {
     @Transaction
     @Query("SELECT * FROM house")
     fun getAllHousesAndAddresses(): Flow<List<HouseAndAddress>>
+
+    @Query("SELECT * FROM picture WHERE houseId = :houseId")
+    fun getPicturesFromHouse(houseId: Int): Flow<List<Picture>>
+
+    @Query("SELECT uri FROM picture WHERE houseId = :houseId")
+    fun getPicUriFromHouse(houseId: Int): Flow<List<String>>
 }

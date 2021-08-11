@@ -86,7 +86,7 @@ class EditItemFragment(private val house: House) : Fragment() {
             val house: House = House(house.price, house.type, "$binding.surfaceEditText.text".toInt(),
                 binding.roomsPicker.value,binding.bedroomsPicker.value, binding.bathroomsPicker.value,
                 "$binding.newDescriptionEditText.text",true, house.dateEntryOnMarket,
-                house.dateSell, house.agentId, house.addressId)
+                house.dateSell, house.agentId, house.addressId, null)
 
             // TODO
 //            houseViewModel.updateHouse(house)

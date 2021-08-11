@@ -31,6 +31,10 @@ class HouseRepository(private val houseDao: HouseDao) {
     fun getAgent(agentId: Int): Flow<Agent> {
         return houseDao.getAgent(agentId)
     }
+
+    fun getPictures(houseId: Int): Flow<List<Picture>> {
+        return houseDao.getPicturesFromHouse(houseId)
+    }
     // endregion GETTERS
 
 

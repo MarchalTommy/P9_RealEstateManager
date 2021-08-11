@@ -122,12 +122,13 @@ class FirestoreHelper {
         dateEntry: String,
         dateSold: String,
         agentId: Int,
-        addressId: Int
+        addressId: Int,
+        mainUri: String
     ): Task<Void> {
 
         val house = House(
-            id, price, type, size, nbrRooms, nbrBedrooms, nbrBathrooms, description,
-            stillAvailable, dateEntry, dateSold, agentId, addressId
+            price, type, size, nbrRooms, nbrBedrooms, nbrBathrooms, description,
+            stillAvailable, dateEntry, dateSold, agentId, addressId, mainUri
         )
 
         return getHousesCollection()
@@ -145,7 +146,7 @@ class FirestoreHelper {
     )
             : Task<Void> {
 
-        val address = Address(id, way, complement, zip, city, houseId)
+        val address = Address(way, complement, zip, city, houseId)
 
         return getAddressesCollection()
             .document(id.toString())

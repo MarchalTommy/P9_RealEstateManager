@@ -78,7 +78,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/detail_address"
-                tools:listitem="@layout/model_detail_size" />
+                tools:listitem="@layout/model_detail_data" />
 
             <TextView
                 android:id="@+id/detail_description"

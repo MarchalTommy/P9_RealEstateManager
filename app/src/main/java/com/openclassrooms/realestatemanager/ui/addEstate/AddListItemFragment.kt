@@ -2,6 +2,7 @@ package com.openclassrooms.realestatemanager.ui.addEstate
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
@@ -22,7 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -30,6 +31,7 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.openclassrooms.realestatemanager.EstateApplication
 import com.openclassrooms.realestatemanager.R
@@ -39,6 +41,7 @@ import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.database.entities.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentAddBinding
 import com.openclassrooms.realestatemanager.ui.detail.DetailFragment
+import com.openclassrooms.realestatemanager.ui.mainList.ListFragment
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
 import java.io.ByteArrayOutputStream
@@ -49,22 +52,39 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class AddListItemFragment : Fragment() {
-
     private val GALLERY_REQUEST_CODE = 24
     private val REQUEST_IMAGE_CAPTURE = 1
-
     lateinit var currentPhotoPath: String
-    private val newHouse: House = House(
-        0, "", 0, 0, 0, 0, "No description",
-        true, Utils.getTodayDate(), " ", 1, 1
-    )
     private val pictureList = ArrayList<Picture>()
-
     private val houseViewModel: HouseViewModel by viewModels {
         HouseViewModelFactory((this.activity?.application as EstateApplication).repository)
     }
     private var _binding: FragmentAddBinding? = null
     private val binding get() = _binding!!
+    private val newHouse: House = House(
+        0, " ", 0, 0, 0, 0, " ",
+        true, Utils.getTodayDate(), " ", 1, 1, " "
+    )
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
+            // Handle the back button event
+            if (Utils.isLandscape(context)) {
+                parentFragmentManager.beginTransaction()
+//                    .add(R.id.second_fragment_twopane, DetailFragment(null))
+                    .commit()
+            } else {
+                parentFragmentManager.beginTransaction()
+                    .add(R.id.main_fragment_portrait, ListFragment())
+                    .commit()
+                val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
+                toolbar.menu.findItem(R.id.add).isEnabled = true
+            }
+        }
+
+        callback.isEnabled = true
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,7 +97,6 @@ class AddListItemFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         layoutInit()
     }
 
@@ -90,13 +109,6 @@ class AddListItemFragment : Fragment() {
         // SETTING BASE LAYOUT
         binding.houseMediaRvDetail.adapter = MediaListAdapter(pictureList)
         binding.houseMediaRvDetail.setHasFixedSize(true)
-
-        binding.bathroomsPicker.minValue = 1
-        binding.bathroomsPicker.maxValue = 15
-        binding.bedroomsPicker.minValue = 1
-        binding.bedroomsPicker.maxValue = 25
-        binding.roomsPicker.minValue = 1
-        binding.roomsPicker.maxValue = 45
 
         binding.newMediaButton.setOnClickListener {
             val items = arrayOf("Camera", "Gallery")
@@ -117,59 +129,7 @@ class AddListItemFragment : Fragment() {
 
         //TODO : add to firestore
         binding.addFab?.setOnClickListener {
-            //Adding a new address Object
-            val address: Address = Address(
-                binding.locationWayEditText.toString(),
-                binding.locationComplementEditText.toString(),
-                "${binding.locationZipEditText.text}".toInt(),
-                binding.locationCityEditText.toString(),
-                newHouse.houseId
-            )
-            houseViewModel.insertAddress(address)
-
-            //Adding pictures to RoomDatabase
-            for (pic in pictureList) {
-                houseViewModel.insertPicture(pic)
-            }
-
-            //Creating the new house
-            if (binding.priceEditText.toString()
-                    .isNotEmpty() && "${binding.priceEditText.text}".toInt() != 0
-            ) {
-                newHouse.price = "${binding.priceEditText.text}".toInt()
-            } else {
-                Toast.makeText(requireContext(), "You need to enter a price !", Toast.LENGTH_SHORT)
-                    .show()
-            }
-            if (binding.typeEditText.toString().isNotEmpty()) {
-                newHouse.type = binding.typeEditText.toString()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "You need to specify the type of estate.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            if (binding.surfaceEditText.toString()
-                    .isNotEmpty() && "${binding.surfaceEditText.text}".toInt() != 0
-            ) {
-                newHouse.size = "${binding.surfaceEditText.text}".toInt()
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "The surface cannot be null or 0.",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-            newHouse.nbrBedrooms = binding.bedroomsPicker.value
-            newHouse.nbrRooms = binding.roomsPicker.value
-            newHouse.nbrBathrooms = binding.bathroomsPicker.value
-            newHouse.description = "${binding.newDescriptionEditText.text}"
-
-            if (newHouse.price > 0 && newHouse.type.isNotEmpty() && newHouse.size > 0) {
-                houseViewModel.insertHouse(newHouse)
-            }
-
+            addNewHouse()
             //Navigate to the detail of the new house
             if (Utils.isLandscape(this.requireContext())) {
                 parentFragmentManager.beginTransaction()
@@ -183,6 +143,91 @@ class AddListItemFragment : Fragment() {
         }
     }
 
+    // TODO : REWORK FORM VALIDATION
+    private fun addNewHouse() {
+        //Creating a new address Object
+        val address = Address(
+            binding.locationWayEditText.toString(),
+            binding.locationComplementEditText.toString(),
+            "${binding.locationZipLayout.editText!!.text}".toInt(),
+            binding.locationCityEditText.toString(),
+            newHouse.houseId
+        )
+        houseViewModel.insertAddress(address)
+
+        //Adding pictures to RoomDatabase
+        if (pictureList.isNotEmpty()) {
+            var i = 0
+            for (pic in pictureList) {
+                if (i == 0) {
+                    newHouse.mainUri = pic.uri
+                    i = 1
+                }
+                houseViewModel.insertPicture(pic)
+            }
+        }
+
+        //Creating the new house
+        //Checking dataset for validation
+        if (binding.priceLayout.editText.toString()
+                .isNotEmpty() && "${binding.priceLayout.editText!!.text}".toInt() != 0
+        ) {
+            newHouse.price = "${binding.priceLayout.editText!!.text}".toInt()
+        } else {
+            binding.priceLayout.error = "You need to enter a price!"
+        }
+        if (binding.typeLayout.editText.toString().isNotEmpty()) {
+            when (binding.typeLayout.editText.toString()) {
+                "Mansion" -> newHouse.type = binding.typeEditText.toString()
+                "Apartment" -> newHouse.type = binding.typeEditText.toString()
+                "House" -> newHouse.type = binding.typeEditText.toString()
+                "Villa" -> newHouse.type = binding.typeEditText.toString()
+                "Castle" -> newHouse.type = binding.typeEditText.toString()
+                else -> binding.typeLayout.error =
+                    "This type of estate is not supported. \nPlease choose between Mansion, Villa, House, Apartment, Castle."
+            }
+        } else {
+            binding.typeLayout.error = "You need to specify the type of estate."
+        }
+        if (binding.surfaceLayout.editText.toString()
+                .isNotEmpty() && "${binding.surfaceLayout.editText!!.text}".toInt() != 0
+        ) {
+            newHouse.size = "${binding.surfaceLayout.editText!!.text}".toInt()
+        } else {
+            binding.surfaceLayout.error = "The surface cannot be null or 0."
+        }
+        if (binding.roomsLayout!!.editText.toString()
+                .isNotEmpty() && "${binding.roomsLayout!!.editText!!.text}".toInt() > 0
+        ) {
+            newHouse.nbrRooms = "${binding.roomsLayout!!.editText!!.text}".toInt()
+        } else {
+            binding.roomsLayout!!.error = "The estate must posses more than 0 rooms."
+        }
+        if (binding.bedroomsLayout!!.editText.toString()
+                .isNotEmpty() && "${binding.bedroomsLayout!!.editText!!.text}".toInt() > 0
+        ) {
+            newHouse.nbrBedrooms = "${binding.bedroomsLayout!!.editText!!.text}".toInt()
+        } else {
+            binding.bedroomsLayout!!.error = "The estate must have more than 0 bedrooms."
+        }
+        if (binding.bathroomsLayout!!.editText.toString()
+                .isNotEmpty() && "${binding.bathroomsLayout!!.editText!!.text}".toInt() > 0
+        ) {
+            newHouse.nbrBathrooms = "${binding.bathroomsLayout!!.editText!!.text}".toInt()
+        } else {
+            binding.bathroomsLayout!!.error = "The estate must posses more than 0 bathrooms."
+        }
+        if (binding.descriptionLayout.editText.toString().isNotEmpty()) {
+            newHouse.description = "${binding.descriptionLayout.editText!!.text}"
+        }
+        if (newHouse.price > 0 && newHouse.type.isNotEmpty() && newHouse.size > 0 && newHouse.nbrBathrooms > 0) {
+            houseViewModel.insertHouse(newHouse)
+        }
+    }
+
+    private fun checkData() {
+
+    }
 
     // PICTURE STUFF
     //CAMERA
@@ -265,7 +310,6 @@ class AddListItemFragment : Fragment() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == RESULT_OK) {
                 galleryAddPic()
-
                 val bitmap: Bitmap = BitmapFactory.decodeFile(currentPhotoPath)
                 val bytes = ByteArrayOutputStream()
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
@@ -276,7 +320,6 @@ class AddListItemFragment : Fragment() {
                     null
                 )
                 val uri = Uri.parse(path)
-
                 mediaDialog(uri)
             }
         }
@@ -308,7 +351,6 @@ class AddListItemFragment : Fragment() {
         val alertDialog = dialogBuilder.create()
         alertDialog.show()
     }
-
 
     // PERMISSIONS MANAGEMENT
     private fun isPermissionsAllowed(): Boolean {
@@ -409,5 +451,4 @@ class AddListItemFragment : Fragment() {
             .setNegativeButton("Cancel", null)
             .show()
     }
-
 }
