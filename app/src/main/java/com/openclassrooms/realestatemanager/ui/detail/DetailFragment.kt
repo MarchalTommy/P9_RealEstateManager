@@ -168,7 +168,8 @@ class DetailFragment(houseClicked: House) : Fragment() {
 
         val addressUrl = address?.toUrlReadyString()
         Log.d(TAG, "fabStaticMap: TEST ADDRESS :$addressUrl")
-        val api = "AIzaSyCSY3FEI2LunSxhfgak7UOK3lFrjdzvFg4"
+        // CHANGED FOR SECURITY
+        val api = "{API_KEY}"
         val url =
             "https://maps.googleapis.com/maps/api/staticmap?center=${addressUrl}&zoom=15&size=300x300&scale=3&markers=color:red|${addressUrl}&key=${api}"
 
