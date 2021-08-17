@@ -136,35 +136,27 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/surface"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="64dp"
-            android:text="Surface"
-            android:textColor="@color/greyText"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@id/bathrooms"
-            app:layout_constraintTop_toBottomOf="@id/description_layout" />
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/surface_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="124dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:hint="Surface"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
             app:boxStrokeWidth="1dp"
             app:boxStrokeWidthFocused="2dp"
-            app:expandedHintEnabled="true"
             app:errorEnabled="true"
+            app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryColor"
-            app:layout_constraintStart_toStartOf="@id/bathrooms"
-            app:layout_constraintTop_toBottomOf="@id/surface">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/rooms_layout"
+            app:layout_constraintTop_toBottomOf="@id/description_layout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/surface_edit_text"
@@ -178,34 +170,27 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/rooms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="Rooms"
-            android:textColor="@color/greyText"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@id/bedrooms"
-            app:layout_constraintTop_toTopOf="@id/surface" />
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/rooms_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="124dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:hint="Rooms"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
             app:boxStrokeWidth="1dp"
             app:boxStrokeWidthFocused="2dp"
-            app:expandedHintEnabled="true"
             app:errorEnabled="true"
+            app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryColor"
-            app:layout_constraintStart_toStartOf="@id/rooms"
-            app:layout_constraintTop_toBottomOf="@id/surface">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/surface_layout"
+            app:layout_constraintTop_toBottomOf="@id/description_layout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/rooms_edit_text"
@@ -219,36 +204,26 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/bathrooms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="64dp"
-            android:text="Bathrooms"
-            android:textColor="@color/greyText"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/bedrooms"
-            app:layout_constraintTop_toBottomOf="@id/surface_layout" />
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/bathrooms_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="124dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Surface"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Bathrooms"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
             app:boxStrokeWidth="1dp"
             app:boxStrokeWidthFocused="2dp"
-            app:expandedHintEnabled="true"
             app:errorEnabled="true"
+            app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryColor"
-            app:layout_constraintStart_toStartOf="@id/bathrooms"
-            app:layout_constraintTop_toBottomOf="@id/bathrooms">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/bedrooms_layout"
+            app:layout_constraintTop_toBottomOf="@id/surface_layout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/bathrooms_edit_text"
@@ -262,35 +237,26 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/bedrooms"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="64dp"
-            android:text="Bedrooms"
-            android:textColor="@color/greyText"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="@id/bathrooms"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/bathrooms" />
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/bedrooms_layout"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="124dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:hint="Surface"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:hint="Bedrooms"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
             app:boxStrokeWidth="1dp"
             app:boxStrokeWidthFocused="2dp"
-            app:expandedHintEnabled="true"
             app:errorEnabled="true"
+            app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryColor"
-            app:layout_constraintStart_toStartOf="@id/bedrooms"
-            app:layout_constraintTop_toBottomOf="@id/bedrooms">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/bathrooms_layout"
+            app:layout_constraintTop_toBottomOf="@id/rooms_layout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/bedrooms_edit_text"

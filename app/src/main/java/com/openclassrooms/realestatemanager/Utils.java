@@ -86,4 +86,7 @@ public class Utils {
     public static Boolean isTablet(Context context) {
         return context.getResources().getBoolean(R.bool.isTablet);
     }
+
 }
+
+

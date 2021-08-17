@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_price_max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Maximum Price"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switch_price_max"
+        app:layout_constraintStart_toEndOf="@id/switch_price_max"
+        app:layout_constraintTop_toTopOf="@id/switch_price_max" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_price_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/switch_price_max" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Minimum Price"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switch_price_min"
+        app:layout_constraintStart_toEndOf="@id/switch_price_min"
+        app:layout_constraintTop_toTopOf="@id/switch_price_min" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filter_price_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:hint="Price"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/primaryColor"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:expandedHintEnabled="true"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/secondaryColor"
+        app:layout_constraintBottom_toBottomOf="@id/switch_price_min"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/switch_price_max">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/filter_price_edt"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxHeight="50dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="32dp"
+        android:background="@color/cardview_shadow_start_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/switch_price_min" />
+
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_size_max"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Maximum Size"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switch_size_max"
+        app:layout_constraintStart_toEndOf="@id/switch_size_max"
+        app:layout_constraintTop_toTopOf="@id/switch_size_max" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_size_min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/switch_size_max" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Minimum Size"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switch_size_min"
+        app:layout_constraintStart_toEndOf="@id/switch_size_min"
+        app:layout_constraintTop_toTopOf="@id/switch_size_min" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filter_size_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:hint="Size"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/primaryColor"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:expandedHintEnabled="true"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/secondaryColor"
+        app:layout_constraintBottom_toBottomOf="@id/switch_size_min"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/switch_size_max">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/filter_size_edt"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxHeight="50dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="32dp"
+        android:background="@color/cardview_shadow_start_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/switch_size_min" />
+
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_room"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider2" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Number of rooms"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switch_room"
+        app:layout_constraintStart_toEndOf="@id/switch_room"
+        app:layout_constraintTop_toTopOf="@id/switch_room" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filter_room_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:hint="Room"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/primaryColor"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:expandedHintEnabled="true"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/secondaryColor"
+        app:layout_constraintBottom_toBottomOf="@id/switch_room"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/switch_room">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/filter_room_edt"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxHeight="50dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_bedroom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/switch_room" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Number of bedrooms"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switch_bedroom"
+        app:layout_constraintStart_toEndOf="@id/switch_bedroom"
+        app:layout_constraintTop_toTopOf="@id/switch_bedroom" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filter_bedroom_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:hint="Bedroom"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/primaryColor"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:expandedHintEnabled="true"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/secondaryColor"
+        app:layout_constraintBottom_toBottomOf="@id/switch_bedroom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/switch_bedroom">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/filter_bedroom_edt"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxHeight="50dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_bathroom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/switch_bedroom" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Number of bathrooms"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switch_bathroom"
+        app:layout_constraintStart_toEndOf="@id/switch_bathroom"
+        app:layout_constraintTop_toTopOf="@id/switch_bathroom" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filter_bathroom_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:hint="Bathroom"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/primaryColor"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:expandedHintEnabled="true"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/secondaryColor"
+        app:layout_constraintBottom_toBottomOf="@id/switch_bathroom"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/switch_bathroom">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/filter_bathroom_edt"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:importantForAutofill="no"
+            android:inputType="number"
+            android:maxHeight="50dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/switch_bathroom" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Type of estate"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switch_type"
+        app:layout_constraintStart_toEndOf="@id/switch_type"
+        app:layout_constraintTop_toTopOf="@id/switch_type" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filter_type_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:hint="Type"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/primaryColor"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:expandedHintEnabled="true"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/secondaryColor"
+        app:layout_constraintBottom_toBottomOf="@id/switch_type"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/switch_type">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/filter_type_edt"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:importantForAutofill="no"
+            android:inputType="textShortMessage"
+            android:maxHeight="50dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/cardview_shadow_start_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/switch_type" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_date_sold_before"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider3" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Sold before"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switch_date_sold_before"
+        app:layout_constraintStart_toEndOf="@id/switch_date_sold_before"
+        app:layout_constraintTop_toTopOf="@id/switch_date_sold_before" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_date_sold_after"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/switch_date_sold_before" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Sold after"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switch_date_sold_after"
+        app:layout_constraintStart_toEndOf="@id/switch_date_sold_after"
+        app:layout_constraintTop_toTopOf="@id/switch_date_sold_after" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filter_date_sold_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:hint="Date sold"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/primaryColor"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:expandedHintEnabled="true"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/secondaryColor"
+        app:layout_constraintBottom_toBottomOf="@id/switch_date_sold_before"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/switch_date_sold_after">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/filter_date_sold_edt"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxHeight="50dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/divider4"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="32dp"
+        android:background="@color/cardview_shadow_start_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/switch_date_sold_after" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_date_added_before"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider4" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Sold before"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switch_date_added_before"
+        app:layout_constraintStart_toEndOf="@id/switch_date_added_before"
+        app:layout_constraintTop_toTopOf="@id/switch_date_added_before" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_date_added_after"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/switch_date_added_before" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Sold after"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switch_date_added_after"
+        app:layout_constraintStart_toEndOf="@id/switch_date_added_after"
+        app:layout_constraintTop_toTopOf="@id/switch_date_added_after" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filter_date_added_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:hint="Date added"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/primaryColor"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:expandedHintEnabled="true"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/secondaryColor"
+        app:layout_constraintBottom_toBottomOf="@id/switch_date_added_before"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/switch_date_added_after">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/filter_date_added_edt"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:importantForAutofill="no"
+            android:inputType="text"
+            android:maxHeight="50dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <View
+        android:id="@+id/divider5"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="32dp"
+        android:background="@color/cardview_shadow_start_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/switch_date_added_after" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switch_availability"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider5" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Availability"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/switch_availability"
+        app:layout_constraintStart_toEndOf="@id/switch_availability"
+        app:layout_constraintTop_toTopOf="@id/switch_availability" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/filter_availability_layout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:hint="True | False"
+        app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/primaryColor"
+        app:boxStrokeWidth="1dp"
+        app:boxStrokeWidthFocused="2dp"
+        app:expandedHintEnabled="true"
+        app:hintAnimationEnabled="true"
+        app:hintEnabled="true"
+        app:hintTextColor="@color/secondaryColor"
+        app:layout_constraintBottom_toBottomOf="@id/switch_availability"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/switch_availability">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/filter_availability_edt"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="none"
+            android:importantForAutofill="no"
+            android:inputType="textShortMessage"
+            android:maxHeight="50dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

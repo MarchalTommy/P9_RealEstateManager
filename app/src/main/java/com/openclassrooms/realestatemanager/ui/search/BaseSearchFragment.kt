@@ -6,17 +6,21 @@ import android.view.*
 import androidx.activity.addCallback
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.add
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.Utils
 import com.openclassrooms.realestatemanager.databinding.FragmentSearchBinding
+import java.lang.Math.abs
 
 class BaseSearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
@@ -55,9 +59,7 @@ class BaseSearchFragment : Fragment() {
             }
             true
         }
-
         bottomNav.setOnItemReselectedListener {
-
         }
     }
 
@@ -68,4 +70,5 @@ class BaseSearchFragment : Fragment() {
         toolbar.menu.findItem(R.id.search).isEnabled = true
         toolbar.title = "Real Estate Manager"
     }
+
 }

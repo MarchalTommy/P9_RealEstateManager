@@ -61,23 +61,21 @@ interface HouseDao {
     @Query("SELECT uri FROM picture WHERE houseId = :houseId")
     fun getPicUriFromHouse(houseId: Int): Flow<List<String>>
 
-    @Query("SELECT * FROM house WHERE price < :priceMax AND price > :priceMin AND size < :sizeMax AND size > :sizeMin AND nbrRooms < :roomMax AND nbrRooms > :roomMin AND nbrBedrooms < :bedroomMax AND nbrBedrooms > :bedroomMin AND nbrBathrooms < :bathroomMax AND nbrBathrooms > :bathroomMin AND type = :type AND dateSell = :dateSold AND dateEntryOnMarket = :dateCreated AND stillAvailable = :available")
+    @Transaction
+    @Query("SELECT * FROM house WHERE price BETWEEN :priceMin AND :priceMax AND size BETWEEN :sizeMin AND :sizeMax AND nbrRooms BETWEEN :roomMin AND :roomMax AND nbrBedrooms BETWEEN :bedroomMin AND :bedroomMax AND nbrBathrooms BETWEEN :bathroomMin AND :bathroomMax AND type = :type")
     fun searchHouse(
-        priceMax: Int = 999999999,
-        priceMin: Int = 0,
-        sizeMax: Int = 999999999,
-        sizeMin: Int = 0,
-        roomMax: Int = 1000,
-        roomMin: Int = 1,
-        bedroomMax: Int = 1000,
-        bedroomMin: Int = 1,
-        bathroomMax: Int = 1000,
-        bathroomMin: Int = 1,
-        type: String = "Villa",
-        dateSold: String = "",
-        dateCreated: String = "27/05/2020",
-        available: Boolean = true
-    ): Flow<List<House>>
+        priceMax: Int,
+        priceMin: Int,
+        sizeMax: Int,
+        sizeMin: Int,
+        roomMax: Int,
+        roomMin: Int,
+        bedroomMax: Int,
+        bedroomMin: Int,
+        bathroomMax: Int,
+        bathroomMin: Int,
+        type: String
+    ): Flow<List<HouseAndAddress>>
 
     @Update
     fun updateHouse(house: House)

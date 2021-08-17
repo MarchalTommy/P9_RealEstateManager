@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/secondaryColor</item>
 
         <item name="floatingActionButtonStyle">@color/secondaryLightColor</item>
+        <item name="sliderStyle">@style/Widget.App.Slider</item>
 
     </style>
 
@@ -16,6 +17,26 @@
         <item name="titleTextColor">@android:color/white</item>
         <item name="colorOnBackground">@android:color/white</item>
         <item name="backgroundColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Widget.App.Slider" parent="Widget.MaterialComponents.Slider">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Slider</item>
+        <item name="labelStyle">@style/Widget.App.Tooltip</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Slider" parent="">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorOnPrimary">@color/primaryTextColor</item>
+        <item name="colorOnSurface">@color/primaryColor</item>
+    </style>
+
+    <style name="Widget.App.Tooltip" parent="Widget.MaterialComponents.Tooltip">
+        <item name="android:textAppearance">@style/TextAppearance.App.Tooltip</item>
+        <item name="backgroundTint">@color/primaryColor</item>
+    </style>
+
+    <style name="TextAppearance.App.Tooltip" parent="TextAppearance.MaterialComponents.Tooltip">
+        <item name="android:textColor">@android:color/black</item>
     </style>
 
 </resources>

@@ -49,11 +49,8 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
         bedroomMin: Int = 1,
         bathroomMax: Int = 1000,
         bathroomMin: Int = 1,
-        type: String = "Villa",
-        dateSold: String = "",
-        dateCreated: String = "27/05/2020",
-        available: Boolean = true
-    ): LiveData<List<House>> {
+        type: String = "Villa"
+    ): LiveData<List<HouseAndAddress>> {
         return repository.searchHouse(
             priceMax,
             priceMin,
@@ -65,10 +62,7 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
             bedroomMin,
             bathroomMax,
             bathroomMin,
-            type,
-            dateSold,
-            dateCreated,
-            available
+            type
         ).asLiveData()
     }
     // endregion GETTERS

@@ -36,21 +36,18 @@ class HouseRepository(private val houseDao: HouseDao) {
     }
 
     fun searchHouse(
-        priceMax: Int = 999999999,
-        priceMin: Int = 0,
-        sizeMax: Int = 999999999,
-        sizeMin: Int = 0,
-        roomMax: Int = 1000,
-        roomMin: Int = 1,
-        bedroomMax: Int = 1000,
-        bedroomMin: Int = 1,
-        bathroomMax: Int = 1000,
-        bathroomMin: Int = 1,
-        type: String = "Villa",
-        dateSold: String = "",
-        dateCreated: String = "27/05/2020",
-        available: Boolean = true
-    ): Flow<List<House>> {
+        priceMax: Int,
+        priceMin: Int,
+        sizeMax: Int,
+        sizeMin: Int,
+        roomMax: Int,
+        roomMin: Int,
+        bedroomMax: Int,
+        bedroomMin: Int,
+        bathroomMax: Int,
+        bathroomMin: Int,
+        type: String
+    ): Flow<List<HouseAndAddress>> {
         return houseDao.searchHouse(
             priceMax,
             priceMin,
@@ -62,10 +59,7 @@ class HouseRepository(private val houseDao: HouseDao) {
             bedroomMin,
             bathroomMax,
             bathroomMin,
-            type,
-            dateSold,
-            dateCreated,
-            available
+            type
         )
     }
     // endregion GETTERS
