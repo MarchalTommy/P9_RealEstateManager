@@ -1,6 +1,5 @@
 package com.openclassrooms.realestatemanager.repository
 
-import com.openclassrooms.realestatemanager.database.FirestoreHelper
 import com.openclassrooms.realestatemanager.database.dao.HouseDao
 import com.openclassrooms.realestatemanager.database.entities.Address
 import com.openclassrooms.realestatemanager.database.entities.Agent
@@ -35,6 +34,40 @@ class HouseRepository(private val houseDao: HouseDao) {
     fun getPictures(houseId: Int): Flow<List<Picture>> {
         return houseDao.getPicturesFromHouse(houseId)
     }
+
+    fun searchHouse(
+        priceMax: Int = 999999999,
+        priceMin: Int = 0,
+        sizeMax: Int = 999999999,
+        sizeMin: Int = 0,
+        roomMax: Int = 1000,
+        roomMin: Int = 1,
+        bedroomMax: Int = 1000,
+        bedroomMin: Int = 1,
+        bathroomMax: Int = 1000,
+        bathroomMin: Int = 1,
+        type: String = "Villa",
+        dateSold: String = "",
+        dateCreated: String = "27/05/2020",
+        available: Boolean = true
+    ): Flow<List<House>> {
+        return houseDao.searchHouse(
+            priceMax,
+            priceMin,
+            sizeMax,
+            sizeMin,
+            roomMax,
+            roomMin,
+            bedroomMax,
+            bedroomMin,
+            bathroomMax,
+            bathroomMin,
+            type,
+            dateSold,
+            dateCreated,
+            available
+        )
+    }
     // endregion GETTERS
 
 
@@ -56,5 +89,16 @@ class HouseRepository(private val houseDao: HouseDao) {
     }
     // endregion INSERTS
 
+    fun updateHouse(house: House) {
+        houseDao.updateHouse(house)
+    }
+
+    fun updateAddress(address: Address) {
+        houseDao.updateAddress(address)
+    }
+
+    fun removePicture(picture: Picture) {
+        houseDao.removePicture(picture)
+    }
 
 }

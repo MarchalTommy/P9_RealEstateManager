@@ -4,6 +4,8 @@ import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.parcelize.Parcelize
+import java.text.NumberFormat
+import java.util.*
 
 @Entity
 @Parcelize
@@ -26,7 +28,17 @@ data class House(
     var houseId: Int = 0
 
     //TODO : work the price so that it matches a price tag. Regex probably
-    fun toString(price: Int): String {
-        return ""
+    fun currencyFormatUS(amount: Int = price): String {
+        val COUNTRY = "US"
+        val LANGUAGE = "en"
+
+        return NumberFormat.getCurrencyInstance(Locale(LANGUAGE, COUNTRY)).format(amount)
+    }
+
+    fun currencyFormatFR(amount: Int = price): String {
+        val COUNTRY = "FR"
+        val LANGUAGE = "fr"
+
+        return NumberFormat.getCurrencyInstance(Locale(LANGUAGE, COUNTRY)).format(amount)
     }
 }

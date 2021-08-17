@@ -1,6 +1,6 @@
-package com.openclassrooms.realestatemanager.ui.mainList
+package com.openclassrooms.realestatemanager.ui.search
 
-import android.content.ContentValues.TAG
+import android.content.ContentValues
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -19,12 +19,13 @@ import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.ui.detail.DetailFragment
+import com.openclassrooms.realestatemanager.ui.mainList.ListFragmentAdapter
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ListFragment : Fragment() {
+class ListSearchFragment : Fragment() {
 
     private val houseViewModel: HouseViewModel by viewModels {
         HouseViewModelFactory((this.activity?.application as EstateApplication).repository)
@@ -61,7 +62,7 @@ class ListFragment : Fragment() {
 
     private fun getLocalHouses() {
         lifecycleScope.launch(Dispatchers.Main) {
-            Log.d(TAG, "getLocalHouses: Room call started, now fetching houses...")
+            Log.d(ContentValues.TAG, "getLocalHouses: Room call started, now fetching houses...")
 
             houseViewModel.allHousesWithAddress.observe(viewLifecycleOwner, {
                 housesAndAddress = it as ArrayList<HouseAndAddress>
@@ -83,16 +84,15 @@ class ListFragment : Fragment() {
             houseClicked = it
 
             lifecycleScope.launch(Dispatchers.Main) {
-                if (Utils.isLandscape(thisContext)) {
-                    parentFragmentManager.beginTransaction()
-                        .add(R.id.second_fragment_twopane, DetailFragment(houseClicked))
-                        .commit()
-                } else {
-                    parentFragmentManager.beginTransaction()
-                        .add(R.id.main_fragment_portrait, DetailFragment(houseClicked))
-                        .addToBackStack("list")
-                        .commit()
-                }
+//                if (Utils.isLandscape(thisContext)) {
+//                    parentFragmentManager.beginTransaction()
+//                        .add(R.id.second_fragment_twopane, DetailFragment(houseClicked))
+//                        .commit()
+//                } else {
+//                    parentFragmentManager.beginTransaction()
+//                        .replace(R.id.main_fragment_portrait, DetailFragment(houseClicked))
+//                        .commit()
+//                }
             }
         })
 

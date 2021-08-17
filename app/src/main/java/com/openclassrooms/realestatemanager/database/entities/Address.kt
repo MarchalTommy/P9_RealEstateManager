@@ -5,10 +5,10 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Address(
-    val way: String,
-    val complement: String,
-    val zip: Int,
-    val city: String,
+    var way: String,
+    var complement: String,
+    var zip: Int,
+    var city: String,
     val houseId: Int
 ) {
     @PrimaryKey(autoGenerate = true)
@@ -16,9 +16,9 @@ data class Address(
 
     override fun toString(): String {
         return if (complement.isEmpty()) {
-            "$way,\n$zip $city"
+            "$way\n$zip, $city"
         } else {
-            "$way,\n$complement\n$zip $city"
+            "$way\n$complement\n$zip, $city"
         }
     }
 

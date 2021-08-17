@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/listSearch"
+        android:title="List Search"
+        android:icon="@drawable/ic_twotone_format_list_bulleted_24"
+        />
+
+    <item
+        android:id="@+id/mapSearch"
+        android:title="Map Search"
+        android:icon="@drawable/ic_twotone_map_24"
+        />
+
+</menu>

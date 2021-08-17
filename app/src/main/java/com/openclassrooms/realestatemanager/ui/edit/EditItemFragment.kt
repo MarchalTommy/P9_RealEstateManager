@@ -1,9 +1,8 @@
-package com.openclassrooms.realestatemanager.ui.addEstate
+package com.openclassrooms.realestatemanager.ui.edit
 
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,7 +11,7 @@ import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment.DIRECTORY_PICTURES
+import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
 import android.view.LayoutInflater
@@ -37,11 +36,13 @@ import com.openclassrooms.realestatemanager.Utils
 import com.openclassrooms.realestatemanager.database.entities.Address
 import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.database.entities.Picture
-import com.openclassrooms.realestatemanager.databinding.FragmentAddBinding
+import com.openclassrooms.realestatemanager.databinding.FragmentEditBinding
 import com.openclassrooms.realestatemanager.ui.detail.DetailFragment
-import com.openclassrooms.realestatemanager.ui.mainList.ListFragment
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -49,24 +50,23 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class AddListItemFragment : Fragment() {
-    private val GALLERY_REQUEST_CODE = 24
-    private val REQUEST_IMAGE_CAPTURE = 1
-    lateinit var currentPhotoPath: String
-    private val pictureList = ArrayList<Picture>()
+class EditItemFragment(private var house: House) : Fragment() {
     private val houseViewModel: HouseViewModel by viewModels {
         HouseViewModelFactory((this.activity?.application as EstateApplication).repository)
     }
-    private var _binding: FragmentAddBinding? = null
+    private val GALLERY_REQUEST = 24
+    private val CAMERA_REQUEST = 1
+    private lateinit var currentPhotoPath: String
+    private lateinit var address: Address
+    //Keeping an instance of old media list in case the user cancel the modifications
+    private val oldMediaList = ArrayList<Picture>()
+    private val newMediaList: ArrayList<Picture> = ArrayList()
+    private var _binding: FragmentEditBinding? = null
     private val binding get() = _binding!!
-    private val newHouse: House = House(
-        0, " ", 0, 0, 0, 0, " ",
-        true, Utils.getTodayDate(), " ", 1, 1, " "
-    )
 
     override fun onDestroy() {
         val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
-        toolbar.menu.findItem(R.id.add).isEnabled = true
+        toolbar.menu.findItem(R.id.edit).isEnabled = true
         toolbar.title = "Real Estate Manager"
         super.onDestroy()
     }
@@ -76,25 +76,40 @@ class AddListItemFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAddBinding.inflate(inflater, container, false)
+        _binding = FragmentEditBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.houseMediaRvDetail.adapter = EditMediaAdapter(newMediaList, ::removeOnClick)
+        binding.houseMediaRvDetail.setHasFixedSize(true)
         layoutInit()
     }
 
-    private fun pictureListUpdate(picture: Picture) {
-        pictureList.add(picture)
-        binding.houseMediaRvDetail.adapter?.notifyDataSetChanged()
-    }
-
     private fun layoutInit() {
-        // SETTING BASE LAYOUT
-        binding.houseMediaRvDetail.adapter = MediaListAdapter(pictureList)
-        binding.houseMediaRvDetail.setHasFixedSize(true)
-
+        // Pre-filling layout with estate data
+        houseViewModel.getAddressFromHouse(house.houseId)
+            .observe(viewLifecycleOwner, { it ->
+                address = it
+                binding.bathroomsLayout?.editText?.setText("${house.nbrBathrooms}")
+                binding.bedroomsLayout?.editText?.setText("${house.nbrBedrooms}")
+                binding.roomsLayout?.editText?.setText("${house.nbrRooms}")
+                binding.surfaceLayout.editText?.setText("${house.size}")
+                binding.descriptionLayout.editText?.setText(house.description)
+                binding.locationWayLayout.editText?.setText(address.way)
+                binding.locationCityLayout.editText?.setText(address.city)
+                binding.locationZipLayout.editText?.setText("${address.zip}")
+                binding.priceLayout.editText?.setText("${house.price}")
+                binding.typeLayout.editText?.setText(house.type)
+            })
+        houseViewModel.getPictures(house.houseId)
+            .observe(viewLifecycleOwner, {
+                oldMediaList.addAll(it)
+                newMediaList.addAll(it)
+                binding.houseMediaRvDetail.adapter?.notifyDataSetChanged()
+            })
         binding.newMediaButton.setOnClickListener {
             val items = arrayOf("Camera", "Gallery")
             MaterialAlertDialogBuilder(
@@ -111,107 +126,103 @@ class AddListItemFragment : Fragment() {
                 }
                 .show()
         }
-
-        //TODO : add to firestore ?
         binding.addFab?.setOnClickListener {
-            addNewHouse()
-            //Navigate to the detail of the new house
-            if (Utils.isLandscape(this.requireContext())) {
-                parentFragmentManager.beginTransaction()
-                    .add(R.id.second_fragment_twopane, DetailFragment(newHouse))
-                    .commit()
-            } else {
-                parentFragmentManager.beginTransaction()
-                    .add(R.id.main_fragment_portrait, DetailFragment(newHouse))
-                    .commit()
-            }
+            update()
         }
     }
 
-    // TODO : REWORK FORM VALIDATION
-    private fun addNewHouse() {
-        //Creating a new address Object
-        val address = Address(
-            "${binding.locationWayLayout.editText!!.text}",
-            "${binding.locationComplementLayout.editText!!.text}",
-            "${binding.locationZipLayout.editText!!.text}".toInt(),
-            "${binding.locationCityLayout.editText!!.text}",
-            newHouse.houseId
-        )
-        houseViewModel.insertAddress(address)
-
-        //Adding pictures to RoomDatabase
-        if (pictureList.isNotEmpty()) {
-            var i = 0
-            for (pic in pictureList) {
-                if (i == 0) {
-                    newHouse.mainUri = pic.uri
-                    i = 1
+    private fun update() {
+        CoroutineScope(Dispatchers.IO).launch {
+            //Checking to add to Room added media
+            for (media in newMediaList) {
+                if (!oldMediaList.contains(media)) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        houseViewModel.insertPicture(media)
+                    }
                 }
-                houseViewModel.insertPicture(pic)
             }
-        }
+            //Checking to remove from Room removed media
+            for (media in oldMediaList) {
+                if (!newMediaList.contains(media)) {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        houseViewModel.removePicture(media)
+                    }
+                }
+            }
+            //Making New mainUri from new media list
+            val mainUri = if (newMediaList.isNotEmpty()) {
+                newMediaList[0].uri
+            } else {
+                null
+            }
+            //House update
+            house.price = "${binding.priceLayout.editText?.text}".toInt()
+            house.type = "${binding.typeLayout.editText?.text}"
+            house.size = "${binding.surfaceLayout.editText?.text}".toInt()
+            house.nbrRooms = "${binding.roomsLayout?.editText?.text}".toInt()
+            house.nbrBedrooms = "${binding.bedroomsLayout?.editText?.text}".toInt()
+            house.nbrBathrooms = "${binding.bathroomsLayout?.editText?.text}".toInt()
+            house.description = "${binding.descriptionLayout.editText?.text}"
+            house.mainUri = mainUri
+            //Address update
+            address.way = "${binding.locationWayLayout.editText?.text}"
+            address.complement = "${binding.locationComplementLayout.editText?.text}"
+            address.city = "${binding.locationCityLayout.editText?.text}"
+            address.zip = "${binding.locationZipLayout.editText?.text}".toInt()
 
-        //Creating the new house
-        //Checking dataset for validation
-        if (binding.priceLayout.editText.toString()
-                .isNotEmpty() && "${binding.priceLayout.editText!!.text}".toInt() != 0
-        ) {
-            newHouse.price = "${binding.priceLayout.editText!!.text}".toInt()
-        } else {
-            binding.priceLayout.error = "You need to enter a price!"
-        }
-        if (binding.typeLayout.editText.toString().isNotEmpty()) {
-            when (binding.typeLayout.editText.toString()) {
-                "Mansion" -> newHouse.type = binding.typeEditText.toString()
-                "Apartment" -> newHouse.type = binding.typeEditText.toString()
-                "House" -> newHouse.type = binding.typeEditText.toString()
-                "Villa" -> newHouse.type = binding.typeEditText.toString()
-                "Castle" -> newHouse.type = binding.typeEditText.toString()
-                else -> binding.typeLayout.error =
-                    "This type of estate is not supported. \nPlease choose between Mansion, Villa, House, Apartment, Castle."
-            }
-        } else {
-            binding.typeLayout.error = "You need to specify the type of estate."
-        }
-        if (binding.surfaceLayout.editText.toString()
-                .isNotEmpty() && "${binding.surfaceLayout.editText!!.text}".toInt() != 0
-        ) {
-            newHouse.size = "${binding.surfaceLayout.editText!!.text}".toInt()
-        } else {
-            binding.surfaceLayout.error = "The surface cannot be null or 0."
-        }
-        if (binding.roomsLayout!!.editText.toString()
-                .isNotEmpty() && "${binding.roomsLayout!!.editText!!.text}".toInt() > 0
-        ) {
-            newHouse.nbrRooms = "${binding.roomsLayout!!.editText!!.text}".toInt()
-        } else {
-            binding.roomsLayout!!.error = "The estate must posses more than 0 rooms."
-        }
-        if (binding.bedroomsLayout!!.editText.toString()
-                .isNotEmpty() && "${binding.bedroomsLayout!!.editText!!.text}".toInt() > 0
-        ) {
-            newHouse.nbrBedrooms = "${binding.bedroomsLayout!!.editText!!.text}".toInt()
-        } else {
-            binding.bedroomsLayout!!.error = "The estate must have more than 0 bedrooms."
-        }
-        if (binding.bathroomsLayout!!.editText.toString()
-                .isNotEmpty() && "${binding.bathroomsLayout!!.editText!!.text}".toInt() > 0
-        ) {
-            newHouse.nbrBathrooms = "${binding.bathroomsLayout!!.editText!!.text}".toInt()
-        } else {
-            binding.bathroomsLayout!!.error = "The estate must posses more than 0 bathrooms."
-        }
-        if (binding.descriptionLayout.editText.toString().isNotEmpty()) {
-            newHouse.description = "${binding.descriptionLayout.editText!!.text}"
-        }
-        if (newHouse.price > 0 && newHouse.type.isNotEmpty() && newHouse.size > 0 && newHouse.nbrBathrooms > 0) {
-            houseViewModel.insertHouse(newHouse)
+            houseViewModel.updateHouse(house)
+            houseViewModel.updateAddress(address)
+            navigateToDetail()
         }
     }
 
-    private fun checkData() {
-        //TODO : trouver meilleur moyen de vérifier le formulaire...
+    private fun navigateToDetail() {
+        if (Utils.isLandscape(this.requireContext())) {
+            parentFragmentManager.beginTransaction()
+//                .add(R.id.second_fragment_twopane, DetailFragment(house))
+                .commit()
+        } else {
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.main_fragment_portrait, DetailFragment(house))
+                .commit()
+        }
+    }
+
+    private fun removeOnClick(picture: Picture) {
+        newMediaList.remove(picture)
+        binding.houseMediaRvDetail.adapter?.notifyDataSetChanged()
+    }
+
+    private fun pictureListUpdate(picture: Picture) {
+        newMediaList.add(picture)
+        binding.houseMediaRvDetail.adapter?.notifyDataSetChanged()
+    }
+
+    //DIALOG TO VALIDATE THE PHOTO AND ADD TITLE
+    private fun mediaDialog(uri: Uri) {
+        val inflater: LayoutInflater = this.layoutInflater
+        val dialogView: View = inflater.inflate(R.layout.dialog_selected_media, null)
+        val picTitleEditText = dialogView.findViewById<EditText>(R.id.pic_title_edit_text)
+        val pic = dialogView.findViewById<ImageView>(R.id.select_pic_image_view)
+
+        Glide.with(this)
+            .load(uri)
+            .into(pic)
+
+        val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
+        dialogBuilder.setTitle("Prepare your picture")
+        dialogBuilder.setCancelable(false)
+        dialogBuilder.setPositiveButton("Add this picture") { dialog, _ ->
+            val newPic = Picture(uri.toString(), picTitleEditText.text.toString(), house.houseId)
+            pictureListUpdate(newPic)
+            dialog.dismiss()
+        }
+        dialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+        dialogBuilder.setView(dialogView)
+        val alertDialog = dialogBuilder.create()
+        alertDialog.show()
     }
 
     // PICTURE STUFF
@@ -250,7 +261,8 @@ class AddListItemFragment : Fragment() {
     @SuppressLint("SimpleDateFormat")
     @Throws(IOException::class)
     private fun createImageFile(): File {
-        val storageDir: File = requireActivity().getExternalFilesDir(DIRECTORY_PICTURES)!!
+        val storageDir: File =
+            requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         return File.createTempFile(
             "JPEG_${timeStamp}_",
@@ -287,7 +299,7 @@ class AddListItemFragment : Fragment() {
     //INTENTS RESULTS (onActivityResult is deprecated)
     private var galleryResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
+            if (result.resultCode == Activity.RESULT_OK) {
                 val data: Intent = result.data!!
                 mediaDialog(data.data!!)
             }
@@ -295,7 +307,7 @@ class AddListItemFragment : Fragment() {
 
     private var cameraResultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == RESULT_OK) {
+            if (result.resultCode == Activity.RESULT_OK) {
                 galleryAddPic()
                 val bitmap: Bitmap = BitmapFactory.decodeFile(currentPhotoPath)
                 val bytes = ByteArrayOutputStream()
@@ -310,33 +322,6 @@ class AddListItemFragment : Fragment() {
                 mediaDialog(uri)
             }
         }
-
-    //DIALOG TO VALIDATE THE PHOTO AND ADD TITLE
-    private fun mediaDialog(uri: Uri) {
-        val inflater: LayoutInflater = this.layoutInflater
-        val dialogView: View = inflater.inflate(R.layout.dialog_selected_media, null)
-        val picTitleEditText = dialogView.findViewById<EditText>(R.id.pic_title_edit_text)
-        val pic = dialogView.findViewById<ImageView>(R.id.select_pic_image_view)
-
-        Glide.with(this)
-            .load(uri)
-            .into(pic)
-
-        val dialogBuilder: AlertDialog.Builder = AlertDialog.Builder(requireContext())
-        dialogBuilder.setTitle("Prepare your picture")
-        dialogBuilder.setCancelable(false)
-        dialogBuilder.setPositiveButton("Add this picture") { dialog, _ ->
-            val newPic = Picture(uri.toString(), picTitleEditText.text.toString(), newHouse.houseId)
-            pictureListUpdate(newPic)
-            dialog.dismiss()
-        }
-        dialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
-            dialog.dismiss()
-        }
-        dialogBuilder.setView(dialogView)
-        val alertDialog = dialogBuilder.create()
-        alertDialog.show()
-    }
 
     // PERMISSIONS MANAGEMENT
     private fun isPermissionsAllowed(): Boolean {
@@ -365,7 +350,7 @@ class AddListItemFragment : Fragment() {
                 ActivityCompat.requestPermissions(
                     this.requireActivity() as Activity,
                     arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                    GALLERY_REQUEST_CODE
+                    GALLERY_REQUEST
                 )
             }
             return false
@@ -385,7 +370,7 @@ class AddListItemFragment : Fragment() {
                 ActivityCompat.requestPermissions(
                     this.requireActivity() as Activity,
                     arrayOf(Manifest.permission.CAMERA),
-                    REQUEST_IMAGE_CAPTURE
+                    CAMERA_REQUEST
                 )
             }
             return false
@@ -399,7 +384,7 @@ class AddListItemFragment : Fragment() {
         grantResults: IntArray
     ) {
         when (requestCode) {
-            REQUEST_IMAGE_CAPTURE -> {
+            CAMERA_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startCamera()
                 } else {
@@ -407,7 +392,7 @@ class AddListItemFragment : Fragment() {
                 }
                 return
             }
-            GALLERY_REQUEST_CODE -> {
+            GALLERY_REQUEST -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startGallery()
                 } else {

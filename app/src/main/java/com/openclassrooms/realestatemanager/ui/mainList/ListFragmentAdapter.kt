@@ -22,13 +22,14 @@ class ListFragmentAdapter(
         return ViewHolder(view)
     }
 
+    // TODO : voir avec Virgile, compatibilité prix EUR ?
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = dataSet[position]
         holder.houseType.text = currentItem.house.type
 
         holder.houseLocation.text = currentItem.address.city
 
-        holder.housePrice.text = "$${currentItem.house.price}"
+        holder.housePrice.text = currentItem.house.currencyFormatUS()
 
         Glide.with(holder.itemView)
             .load(currentItem.house.mainUri)

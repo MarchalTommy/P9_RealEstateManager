@@ -9,20 +9,23 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.navigation.NavigationView
 import com.openclassrooms.realestatemanager.EstateApplication
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.Utils
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding
 import com.openclassrooms.realestatemanager.ui.addEstate.AddListItemFragment
-import com.openclassrooms.realestatemanager.ui.detail.DetailFragment
 import com.openclassrooms.realestatemanager.ui.mainList.ListFragment
+import com.openclassrooms.realestatemanager.ui.search.BaseSearchFragment
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
+import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var toolbar: MaterialToolbar
+    private val menuItems = ArrayList<MenuItem>()
 
     private val houseViewModel: HouseViewModel by viewModels {
         HouseViewModelFactory((application as EstateApplication).repository)
@@ -70,29 +73,35 @@ class MainActivity : AppCompatActivity() {
                     toolbar.title = "Add a new estate"
                 } else {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.main_fragment_portrait, AddListItemFragment())
+                        .add(R.id.main_fragment_portrait, AddListItemFragment())
+                        .addToBackStack("start")
                         .commit()
                     toolbar.title = "Add a new estate"
                 }
+                menuItems.add(item)
                 item.isEnabled = false
                 true
             }
             R.id.edit -> {
-                // TODO: find a way to get House here to send it to the other fragment as argument. Event ?
-//                if (Utils.isTablet(this) || Utils.isLandscape(this)) {
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.second_fragment_twopane, EditItemFragment())
-//                        .commit()
-//                } else {
-//                    supportFragmentManager.beginTransaction()
-//                        .replace(R.id.main_fragment_portrait, EditItemFragment())
-//                        .commit()
-//                }
+                menuItems.add(item)
                 item.isEnabled = false
                 true
             }
             R.id.search -> {
                 // TODO: Implement some kind of search bar like P7 I THINK maybe idk
+                if (Utils.isTablet(this) || Utils.isLandscape(this)) {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.second_fragment_twopane, BaseSearchFragment())
+                        .commit()
+                    toolbar.title = "Search"
+                } else {
+                    supportFragmentManager.beginTransaction()
+                        .add(R.id.main_fragment_portrait, BaseSearchFragment())
+                        .addToBackStack("start")
+                        .commit()
+                    toolbar.title = "Search"
+                }
+                menuItems.add(item)
                 item.isEnabled = false
                 true
             }

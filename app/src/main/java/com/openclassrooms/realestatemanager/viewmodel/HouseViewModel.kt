@@ -7,6 +7,7 @@ import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.database.entities.Picture
 import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
 import com.openclassrooms.realestatemanager.repository.HouseRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
@@ -36,6 +37,40 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
     fun getPictures(houseId: Int): LiveData<List<Picture>> {
         return repository.getPictures(houseId).asLiveData()
     }
+
+    fun searchHouse(
+        priceMax: Int = 999999999,
+        priceMin: Int = 0,
+        sizeMax: Int = 999999999,
+        sizeMin: Int = 0,
+        roomMax: Int = 1000,
+        roomMin: Int = 1,
+        bedroomMax: Int = 1000,
+        bedroomMin: Int = 1,
+        bathroomMax: Int = 1000,
+        bathroomMin: Int = 1,
+        type: String = "Villa",
+        dateSold: String = "",
+        dateCreated: String = "27/05/2020",
+        available: Boolean = true
+    ): LiveData<List<House>> {
+        return repository.searchHouse(
+            priceMax,
+            priceMin,
+            sizeMax,
+            sizeMin,
+            roomMax,
+            roomMin,
+            bedroomMax,
+            bedroomMin,
+            bathroomMax,
+            bathroomMin,
+            type,
+            dateSold,
+            dateCreated,
+            available
+        ).asLiveData()
+    }
     // endregion GETTERS
 
     // region INSERTS
@@ -58,9 +93,17 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
 
     // TODO : UPDATES FUN
     // region UPDATES
-//    fun updateHouse(house: House) = viewModelScope.launch {
-//        repository.updateHouse(house)
-//    }
+    fun updateHouse(house: House) = viewModelScope.launch(Dispatchers.IO) {
+        repository.updateHouse(house)
+    }
+
+    fun updateAddress(address: Address) = viewModelScope.launch(Dispatchers.IO) {
+        repository.updateAddress(address)
+    }
+
+    fun removePicture(picture: Picture) = viewModelScope.launch(Dispatchers.IO) {
+        repository.removePicture(picture)
+    }
     // endregion UPDATES
 }
 

@@ -25,7 +25,7 @@ import com.openclassrooms.realestatemanager.database.entities.Agent
 import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.database.entities.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
-import com.openclassrooms.realestatemanager.ui.EditItemFragment
+import com.openclassrooms.realestatemanager.ui.edit.EditItemFragment
 import com.openclassrooms.realestatemanager.ui.mainList.ListFragment
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
@@ -44,37 +44,31 @@ class DetailFragment(houseClicked: House) : Fragment() {
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
 
+    override fun onDestroy() {
+        super.onDestroy()
+        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar.menu.findItem(R.id.edit).isEnabled = false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            // Handle the back button event
-            if (Utils.isLandscape(context)) {
-                parentFragmentManager.beginTransaction()
-//                    .add(R.id.second_fragment_twopane, DetailFragment(null))
-                    .commit()
-            } else {
-                parentFragmentManager.beginTransaction()
-                    .add(R.id.main_fragment_portrait, ListFragment())
-                    .commit()
-            }
-        }
         val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.menu.findItem(R.id.edit).isEnabled = true
         toolbar.menu.findItem(R.id.edit).setOnMenuItemClickListener {
             if (Utils.isLandscape(context)) {
                 parentFragmentManager.beginTransaction()
-                    .add(R.id.second_fragment_twopane, EditItemFragment(mHouse))
+//                    .replace(R.id.second_fragment_twopane, EditItemFragment(mHouse))
                     .commit()
                 toolbar.menu.findItem(R.id.edit).isEnabled = false
             } else {
                 parentFragmentManager.beginTransaction()
                     .add(R.id.main_fragment_portrait, EditItemFragment(mHouse))
+                    .addToBackStack("detail")
                     .commit()
                 toolbar.menu.findItem(R.id.edit).isEnabled = false
             }
             true
         }
-        callback.isEnabled = true
     }
 
     override fun onCreateView(
@@ -100,7 +94,7 @@ class DetailFragment(houseClicked: House) : Fragment() {
     private fun initLayout() {
         binding.detailAddress.text = address.toString()
         binding.detailType.text = mHouse.type
-        binding.detailPrice?.text = mHouse.price.toString()
+        binding.detailPrice?.text = mHouse.currencyFormatUS()
     }
 
     private fun finishLayout() {
@@ -168,7 +162,7 @@ class DetailFragment(houseClicked: House) : Fragment() {
 
         val addressUrl = address?.toUrlReadyString()
         Log.d(TAG, "fabStaticMap: TEST ADDRESS :$addressUrl")
-        val api = "AIzaSyCSY3FEI2LunSxhfgak7UOK3lFrjdzvFg4"
+        val api = resources.getString(R.string.google_api_key)
         val url =
             "https://maps.googleapis.com/maps/api/staticmap?center=${addressUrl}&zoom=15&size=300x300&scale=3&markers=color:red|${addressUrl}&key=${api}"
 
