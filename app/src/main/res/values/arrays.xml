@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="initial_slider_values">
+        <item>10000000.0</item>
+        <item>80000000.0</item>
+    </array>
+    <array name="initial_slider2_values">
+        <item>350.0</item>
+        <item>2650.0</item>
+    </array>
+    <array name="initial_slider3_values">
+        <item>5.0</item>
+        <item>36.0</item>
+    </array>
+</resources>

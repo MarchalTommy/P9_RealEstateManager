@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager
 
 import android.app.Application
+import android.content.Context
 import com.openclassrooms.realestatemanager.database.EstateDatabase
 import com.openclassrooms.realestatemanager.repository.HouseRepository
 import kotlinx.coroutines.CoroutineScope
@@ -11,4 +12,5 @@ class EstateApplication : Application() {
 
     val database by lazy { EstateDatabase.getDatabase(this, applicationScope) }
     val repository by lazy { HouseRepository(database.houseDao()) }
+
 }

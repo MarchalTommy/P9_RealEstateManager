@@ -36,6 +36,10 @@ android {
         viewBinding = true
     }
     ndkVersion '22.0.7026061'
+    useLibrary("android.test.runner")
+
+    useLibrary("android.test.base")
+    useLibrary("android.test.mock")
 }
 
 dependencies {
@@ -57,15 +61,13 @@ dependencies {
     androidTestImplementation 'junit:junit:4.13.2'
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.5.21"
 
+    // Core library
+    androidTestImplementation('androidx.test:core:1.0.0')
+
     // MAPS
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.android.gms:play-services-maps:17.0.1'
     implementation 'com.google.android.gms:play-services-location:18.0.0'
-
-    // FIREBASE
-    implementation platform('com.google.firebase:firebase-bom:28.3.0')
-    implementation 'com.google.firebase:firebase-firestore-ktx'
-    implementation 'com.google.firebase:firebase-analytics-ktx'
 
     // MATERIAL DESIGN
     implementation 'com.google.android.material:material:1.4.0'

@@ -21,7 +21,7 @@ data class House(
     var dateEntryOnMarket: String,
     var dateSell: String,
     val agentId: Int,
-    var addressId: Int,
+    var addressId: Int?,
     var mainUri: String?
 ) : Parcelable {
     @PrimaryKey(autoGenerate = true)

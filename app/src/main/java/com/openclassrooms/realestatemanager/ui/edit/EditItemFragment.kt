@@ -4,6 +4,7 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -14,25 +15,25 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.openclassrooms.realestatemanager.EstateApplication
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.Utils
 import com.openclassrooms.realestatemanager.database.entities.Address
 import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.database.entities.Picture
@@ -40,9 +41,7 @@ import com.openclassrooms.realestatemanager.databinding.FragmentEditBinding
 import com.openclassrooms.realestatemanager.ui.detail.DetailFragment
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
@@ -58,6 +57,7 @@ class EditItemFragment(private var house: House) : Fragment() {
     private val CAMERA_REQUEST = 1
     private lateinit var currentPhotoPath: String
     private lateinit var address: Address
+
     //Keeping an instance of old media list in case the user cancel the modifications
     private val oldMediaList = ArrayList<Picture>()
     private val newMediaList: ArrayList<Picture> = ArrayList()
@@ -132,60 +132,59 @@ class EditItemFragment(private var house: House) : Fragment() {
     }
 
     private fun update() {
-        CoroutineScope(Dispatchers.IO).launch {
-            //Checking to add to Room added media
+        //Checking to add to Room added media
+        val jobAdd: Job = lifecycleScope.launch(Dispatchers.IO) {
             for (media in newMediaList) {
                 if (!oldMediaList.contains(media)) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        houseViewModel.insertPicture(media)
-                    }
+                    houseViewModel.insertPicture(media)
                 }
             }
-            //Checking to remove from Room removed media
+        }
+        jobAdd.start()
+        //Checking to remove from Room removed media
+        val jobRemove: Job = lifecycleScope.launch(Dispatchers.IO) {
             for (media in oldMediaList) {
                 if (!newMediaList.contains(media)) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        houseViewModel.removePicture(media)
-                    }
+                    houseViewModel.removePicture(media)
                 }
             }
-            //Making New mainUri from new media list
-            val mainUri = if (newMediaList.isNotEmpty()) {
-                newMediaList[0].uri
-            } else {
-                null
-            }
-            //House update
-            house.price = "${binding.priceLayout.editText?.text}".toInt()
-            house.type = "${binding.typeLayout.editText?.text}"
-            house.size = "${binding.surfaceLayout.editText?.text}".toInt()
-            house.nbrRooms = "${binding.roomsLayout?.editText?.text}".toInt()
-            house.nbrBedrooms = "${binding.bedroomsLayout?.editText?.text}".toInt()
-            house.nbrBathrooms = "${binding.bathroomsLayout?.editText?.text}".toInt()
-            house.description = "${binding.descriptionLayout.editText?.text}"
-            house.mainUri = mainUri
-            //Address update
-            address.way = "${binding.locationWayLayout.editText?.text}"
-            address.complement = "${binding.locationComplementLayout.editText?.text}"
-            address.city = "${binding.locationCityLayout.editText?.text}"
-            address.zip = "${binding.locationZipLayout.editText?.text}".toInt()
+        }
+        jobRemove.start()
+        //Making New mainUri from new media list
+        val mainUri = if (newMediaList.isNotEmpty()) {
+            newMediaList[0].uri
+        } else {
+            null
+        }
+        //House update
+        house.price = "${binding.priceLayout.editText?.text}".toInt()
+        house.type = "${binding.typeLayout.editText?.text}"
+        house.size = "${binding.surfaceLayout.editText?.text}".toInt()
+        house.nbrRooms = "${binding.roomsLayout?.editText?.text}".toInt()
+        house.nbrBedrooms = "${binding.bedroomsLayout?.editText?.text}".toInt()
+        house.nbrBathrooms = "${binding.bathroomsLayout?.editText?.text}".toInt()
+        house.description = "${binding.descriptionLayout.editText?.text}"
+        house.mainUri = mainUri
+        //Address update
+        address.way = "${binding.locationWayLayout.editText?.text}"
+        address.complement = "${binding.locationComplementLayout.editText?.text}"
+        address.city = "${binding.locationCityLayout.editText?.text}"
+        address.zip = "${binding.locationZipLayout.editText?.text}".toInt()
 
+        CoroutineScope(Dispatchers.IO).launch {
+            jobAdd.join()
+            jobRemove.join()
             houseViewModel.updateHouse(house)
             houseViewModel.updateAddress(address)
-            navigateToDetail()
         }
-    }
-
-    private fun navigateToDetail() {
-        if (Utils.isLandscape(this.requireContext())) {
-            parentFragmentManager.beginTransaction()
-//                .add(R.id.second_fragment_twopane, DetailFragment(house))
-                .commit()
-        } else {
-            parentFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_portrait, DetailFragment(house))
-                .commit()
+        runBlocking {
+            jobAdd.join()
+            jobRemove.join()
         }
+        Log.d(TAG, "update: ${parentFragmentManager.backStackEntryCount}")
+        parentFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment_portrait, DetailFragment(house))
+            .commit()
     }
 
     private fun removeOnClick(picture: Picture) {

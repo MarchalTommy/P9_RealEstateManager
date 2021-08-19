@@ -7,11 +7,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
@@ -94,18 +96,33 @@ class MapFragment : Fragment() {
     private fun getEstateAddress() {
         houseViewModel.allHousesWithAddress.observe(viewLifecycleOwner, {
             housesAndAddresses.addAll(it)
-            for (estate in housesAndAddresses) {
-                val markerOption = MarkerOptions()
-                markerOption.title(estate.house.type)
-                    .snippet(estate.house.houseId.toString())
-                    .position(
-                        getLocationByAddress(
-                            requireContext(),
-                            "${estate.address.way}, ${estate.address.city}"
-                        )!!
-                    )
 
-                gMap.addMarker(markerOption)
+            for (estate in housesAndAddresses) {
+                if(estate.house.stillAvailable) {
+                    val markerOption = MarkerOptions()
+                    markerOption.title("AVAILABLE : ${estate.house.type}")
+                        .snippet(estate.house.houseId.toString())
+                        .icon(BitmapDescriptorFactory.defaultMarker(41f))
+                        .position(
+                            getLocationByAddress(
+                                requireContext(),
+                                "${estate.address.way}, ${estate.address.city}"
+                            )!!
+                        )
+                    gMap.addMarker(markerOption)
+                } else {
+                    val markerOption = MarkerOptions()
+                    markerOption.title("SOLD : ${estate.house.type}")
+                        .snippet(estate.house.houseId.toString())
+                        .icon(BitmapDescriptorFactory.defaultMarker(189f))
+                        .position(
+                            getLocationByAddress(
+                                requireContext(),
+                                "${estate.address.way}, ${estate.address.city}"
+                            )!!
+                        )
+                    gMap.addMarker(markerOption)
+                }
             }
         })
     }

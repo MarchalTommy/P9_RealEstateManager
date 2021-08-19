@@ -1,6 +1,7 @@
 package com.openclassrooms.realestatemanager.ui.detail
 
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
@@ -8,15 +9,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.activity.addCallback
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.SnapHelper
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.openclassrooms.realestatemanager.EstateApplication
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.Utils
@@ -26,9 +30,11 @@ import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.database.entities.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentDetailBinding
 import com.openclassrooms.realestatemanager.ui.edit.EditItemFragment
-import com.openclassrooms.realestatemanager.ui.mainList.ListFragment
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 class DetailFragment(houseClicked: House) : Fragment() {
 
@@ -36,7 +42,7 @@ class DetailFragment(houseClicked: House) : Fragment() {
         HouseViewModelFactory((this.activity?.application as EstateApplication).repository)
     }
 
-    private val mHouse: House = houseClicked
+    private var mHouse: House = houseClicked
     private var address: Address? = null
     private var agent: Agent? = null
     private var isLandscape: Boolean = false
@@ -71,6 +77,30 @@ class DetailFragment(houseClicked: House) : Fragment() {
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        lateinit var bottomBar: BottomNavigationView
+        if (this@DetailFragment.parentFragment != null) {
+            Log.d(TAG, "onCreate: ${requireParentFragment().id}")
+            bottomBar = requireParentFragment().requireView().findViewById(R.id.bottom_nav_bar)!!
+            bottomBar.visibility = View.GONE
+        }
+        val callback: OnBackPressedCallback = object : OnBackPressedCallback(
+            true // default to enabled
+        ) {
+            override fun handleOnBackPressed() {
+                parentFragmentManager.popBackStack()
+                if (this@DetailFragment.parentFragment != null) {
+                    bottomBar.visibility = View.VISIBLE
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,  // LifecycleOwner
+            callback
+        )
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -89,6 +119,10 @@ class DetailFragment(houseClicked: House) : Fragment() {
         binding.detailDescription.text = mHouse.description
 
         initDataRecyclerView()
+
+        if (parentFragmentManager.backStackEntryCount > 1) {
+            parentFragmentManager.popBackStack()
+        }
     }
 
     private fun initLayout() {
@@ -135,7 +169,7 @@ class DetailFragment(houseClicked: House) : Fragment() {
     private fun initMediaRecyclerView(dataSet: List<Picture>) {
         binding.detailMediaRv.adapter = PictureListAdapter(dataSet, isLandscape)
         binding.detailMediaRv.setHasFixedSize(true)
-
+        binding.detailMediaRv.onFlingListener = null;
         val snapHelper: SnapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(binding.detailMediaRv)
     }
@@ -143,7 +177,7 @@ class DetailFragment(houseClicked: House) : Fragment() {
     private fun initDataRecyclerView() {
         binding.detailDataRv.adapter = DataDetailAdapter(getDataSet(), getDrawables())
         binding.detailDataRv.setHasFixedSize(true)
-
+        binding.detailDataRv.onFlingListener = null;
         val snapHelper: SnapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(binding.detailDataRv)
 
@@ -163,18 +197,38 @@ class DetailFragment(houseClicked: House) : Fragment() {
         val addressUrl = address?.toUrlReadyString()
         Log.d(TAG, "fabStaticMap: TEST ADDRESS :$addressUrl")
         val api = resources.getString(R.string.google_api_key)
-        val url =
-            "https://maps.googleapis.com/maps/api/staticmap?center=${addressUrl}&zoom=15&size=300x300&scale=3&markers=color:red|${addressUrl}&key=${api}"
 
-        binding.detailFab?.setOnClickListener {
+        fun connectionIsAvailable() {
             staticMapDialog.show()
             val imageView = staticMapDialog.findViewById<ImageView>(R.id.static_map_view)
-
-
             Glide.with(requireContext())
-                .load(url)
+                .load(houseViewModel.getStaticMap(addressUrl!!, api))
                 .centerCrop()
                 .into(imageView!!)
         }
+
+        fun connectionUnavailable() {
+            Snackbar.make(
+                binding.root,
+                "No internet connection available! Please verify that you have access to a network, or try again later.",
+                Snackbar.LENGTH_LONG
+            ).show()
+            // TODO : mettre en place un worker pour prévenir en cas de retour de connection
+        }
+
+        binding.detailFab?.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                if (Utils.isOnline()) {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        connectionIsAvailable()
+                    }
+                } else {
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        connectionUnavailable()
+                    }
+                }
+            }
+        }
+
     }
 }

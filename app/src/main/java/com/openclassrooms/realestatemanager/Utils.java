@@ -6,12 +6,23 @@ import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import kotlinx.coroutines.CoroutineScope;
+import kotlinx.coroutines.GlobalScope;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Philippe on 21/02/2018.
@@ -48,35 +59,20 @@ public class Utils {
     /**
      * Vérification de la connexion réseau
      * NOTE : NE PAS SUPPRIMER, A MONTRER DURANT LA SOUTENANCE
-     *
-     * @param context
-     * @return
      */
-    // For latest version of Android
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public static Boolean isInternetAvailableNew(Context context) {
-        ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkCapabilities capabilities = manager.getNetworkCapabilities(manager.getActiveNetwork());
-        boolean isAvailable = false;
+    public static boolean isOnline() {
+        try {
+            int timeoutMs = 1500;
+            Socket sock = new Socket();
+            SocketAddress sockaddr = new InetSocketAddress("8.8.8.8", 53);
 
-        if (capabilities != null) {
-            if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                isAvailable = true;
-            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                isAvailable = true;
-            } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)) {
-                isAvailable = true;
-            }
-        }
-        return isAvailable;
-    }
+            sock.connect(sockaddr, timeoutMs);
+            sock.close();
 
-    // For earlier versions :
-    public static Boolean isInternetAvailableOld(Context context) {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+            return true;
+        } catch (IOException e) {
+            Log.e(TAG, "isOnline: ERROR --> ", e);
+            return false; }
     }
 
     public static Boolean isLandscape(Context context) {
@@ -86,6 +82,15 @@ public class Utils {
     public static Boolean isTablet(Context context) {
         return context.getResources().getBoolean(R.bool.isTablet);
     }
+
+//    public static void enableData(Context context, boolean enable) {
+//        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+//        try {
+//            Method m = cm.getClass().getDeclaredMethod("setMobileDataEnabled", boolean.class);
+//            m.invoke(cm, enable);
+//        } catch (Exception e) {
+//        }
+//    }
 
 }
 

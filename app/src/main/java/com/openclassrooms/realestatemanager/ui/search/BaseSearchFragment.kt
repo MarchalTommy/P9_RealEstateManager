@@ -7,6 +7,7 @@ import androidx.activity.addCallback
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.add
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,9 +18,12 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.Utils
 import com.openclassrooms.realestatemanager.databinding.FragmentSearchBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.Math.abs
 
 class BaseSearchFragment : Fragment() {
@@ -51,10 +55,24 @@ class BaseSearchFragment : Fragment() {
                         .commit()
                 }
                 R.id.mapSearch -> {
-                    childFragmentManager.beginTransaction()
-                        .replace(R.id.search_container, MapFragment())
-                        .addToBackStack("TEST")
-                        .commit()
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        if (Utils.isOnline()) {
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                childFragmentManager.beginTransaction()
+                                    .replace(R.id.search_container, MapFragment())
+                                    .commit()
+                            }
+                        } else {
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                Snackbar.make(
+                                    binding.root,
+                                    "No internet connection available! Please verify that you have access to a network, or try again later.",
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                                bottomNav.selectedItemId = R.id.listSearch
+                            }
+                        }
+                    }
                 }
             }
             true

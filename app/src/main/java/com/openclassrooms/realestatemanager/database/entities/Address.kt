@@ -6,10 +6,10 @@ import androidx.room.PrimaryKey
 @Entity
 data class Address(
     var way: String,
-    var complement: String,
+    var complement: String = "",
     var zip: Int,
     var city: String,
-    val houseId: Int
+    var houseId: Int
 ) {
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0

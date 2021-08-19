@@ -36,7 +36,6 @@ import java.text.NumberFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
-import kotlin.properties.Delegates
 
 class ListSearchFragment : Fragment() {
 
@@ -46,6 +45,7 @@ class ListSearchFragment : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var thisContext: Context
+    private lateinit var adapter: ListFragmentAdapter
     private var housesAndAddress: ArrayList<HouseAndAddress> = ArrayList()
     private var filteredDataSet = ArrayList<HouseAndAddress>()
 
@@ -93,7 +93,8 @@ class ListSearchFragment : Fragment() {
     }
 
     private fun prepareAdapter(dataSet: List<HouseAndAddress>) {
-        recyclerView.adapter = ListFragmentAdapter(dataSet, ::listOnClick)
+        adapter = ListFragmentAdapter(dataSet, ::listOnClick)
+        recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(thisContext)
         recyclerView.setHasFixedSize(true)
     }
@@ -116,7 +117,8 @@ class ListSearchFragment : Fragment() {
                         .commit()
                 } else {
                     parentFragmentManager.beginTransaction()
-                        .replace(R.id.main_fragment_portrait, DetailFragment(houseClicked))
+                        .replace(R.id.search_container, DetailFragment(houseClicked))
+                        .addToBackStack("searchList")
                         .commit()
                 }
             }

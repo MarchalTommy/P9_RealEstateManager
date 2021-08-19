@@ -128,7 +128,7 @@ class AddListItemFragment : Fragment() {
         }
     }
 
-    // TODO : REWORK FORM VALIDATION
+    // TODO : REWORK FORM VALIDATION + TROUVER POURQUOI NULL EXCEPTION SUR ADDRESS DANS HOUSEANDADDRESS
     private fun addNewHouse() {
         //Creating a new address Object
         val address = Address(

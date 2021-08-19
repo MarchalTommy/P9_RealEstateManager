@@ -85,7 +85,6 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
     }
     // endregion INSERTS
 
-    // TODO : UPDATES FUN
     // region UPDATES
     fun updateHouse(house: House) = viewModelScope.launch(Dispatchers.IO) {
         repository.updateHouse(house)
@@ -99,6 +98,10 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
         repository.removePicture(picture)
     }
     // endregion UPDATES
+
+    fun getStaticMap(address: String, api: String): String {
+        return repository.getStaticMap(address, api)
+    }
 }
 
 class HouseViewModelFactory(private val repository: HouseRepository) : ViewModelProvider.Factory {

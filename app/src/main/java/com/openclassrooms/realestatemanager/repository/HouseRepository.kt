@@ -1,5 +1,9 @@
 package com.openclassrooms.realestatemanager.repository
 
+import android.content.ContentValues
+import android.util.Log
+import com.openclassrooms.realestatemanager.EstateApplication
+import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.dao.HouseDao
 import com.openclassrooms.realestatemanager.database.entities.Address
 import com.openclassrooms.realestatemanager.database.entities.Agent
@@ -94,5 +98,10 @@ class HouseRepository(private val houseDao: HouseDao) {
     fun removePicture(picture: Picture) {
         houseDao.removePicture(picture)
     }
+
+    fun getStaticMap(address: String, api: String): String {
+        return "https://maps.googleapis.com/maps/api/staticmap?center=$address&zoom=15&size=300x300&scale=3&markers=color:red|$address&key=${api}"
+    }
+
 
 }
