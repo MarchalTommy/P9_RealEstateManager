@@ -18,7 +18,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.openclassrooms.realestatemanager.EstateApplication
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.Utils
-import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
+import com.openclassrooms.realestatemanager.database.entities.Address
+import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.ui.detail.DetailFragment
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
@@ -28,15 +29,14 @@ import kotlinx.coroutines.launch
 
 
 class ListFragment : Fragment() {
-
     private val houseViewModel: HouseViewModel by viewModels {
         HouseViewModelFactory((this.activity?.application as EstateApplication).repository)
     }
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ListFragmentAdapter
     private lateinit var thisContext: Context
-    private var housesAndAddress: ArrayList<HouseAndAddress> = ArrayList()
+    private var houses: ArrayList<House> = ArrayList()
+    private var addresses = ArrayList<Address>()
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
@@ -59,8 +59,8 @@ class ListFragment : Fragment() {
 //        parentFragmentManager.popBackStackImmediate()
 //        childFragmentManager.popBackStackImmediate()
 
-        for (estate in housesAndAddress) {
-            houseViewModel.updateHouse(estate.house)
+        for (estate in houses) {
+            houseViewModel.updateHouse(estate)
         }
 
         getLocalHouses()
@@ -72,16 +72,18 @@ class ListFragment : Fragment() {
     }
 
     private fun getLocalHouses() {
-        lifecycleScope.launch(Dispatchers.Main) {
             Log.d(TAG, "getLocalHouses: Room call started, now fetching houses...")
-            houseViewModel.allHousesWithAddress.observe(viewLifecycleOwner, {
-                prepareAdapter(it)
+            houseViewModel.allHouses.observe(viewLifecycleOwner, { it ->
+                houses = it as ArrayList<House>
+                houseViewModel.allAddresses.observe(viewLifecycleOwner, { addressesList ->
+                    addresses = addressesList as ArrayList<Address>
+                    prepareAdapter(houses, addresses)
+                })
             })
-        }
     }
 
-    private fun prepareAdapter(dataSet: List<HouseAndAddress>) {
-        adapter = ListFragmentAdapter(dataSet, ::listOnClick)
+    private fun prepareAdapter(dataSet: List<House>, dataSet2: List<Address>) {
+        adapter = ListFragmentAdapter(dataSet, dataSet2, ::listOnClick)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(thisContext)
         recyclerView.setHasFixedSize(true)
@@ -100,21 +102,22 @@ class ListFragment : Fragment() {
 
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val position = viewHolder.adapterPosition
-                    val estate: HouseAndAddress = adapter.getItemAt(position)
-                    housesAndAddress.add(estate)
+                    val estate: House = adapter.getEstateAt(position)
+//                    houses.add(estate)
 
                     if (direction == ItemTouchHelper.RIGHT) {
-                        estate.house.stillAvailable = false
-                        estate.house.dateSell = Utils.getTodayDate()
+                        estate.stillAvailable = false
+                        estate.dateSell = Utils.getTodayDate()
                         adapter.notifyDataSetChanged()
+                        recyclerView.scrollToPosition(position)
                         Snackbar.make(
                             binding.root,
                             "Estate sold successfully.",
                             Snackbar.LENGTH_LONG
                         ).apply {
                             setAction("UNDO") {
-                                estate.house.stillAvailable = true
-                                estate.house.dateSell = " "
+                                estate.stillAvailable = true
+                                estate.dateSell = " "
                                 adapter.notifyDataSetChanged()
                                 recyclerView.scrollToPosition(position)
                             }
@@ -126,16 +129,17 @@ class ListFragment : Fragment() {
                             )
                         }.show()
                     } else {
-                        estate.house.stillAvailable = true
-                        estate.house.dateSell = " "
+                        estate.stillAvailable = true
+                        estate.dateSell = " "
                         adapter.notifyDataSetChanged()
+                        recyclerView.scrollToPosition(position)
                         Snackbar.make(
                             binding.root,
                             "Estate successfully marked as not sold.",
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
-                    houseViewModel.updateHouse(estate.house)
+                    houseViewModel.updateHouse(estate)
                 }
             }
         ItemTouchHelper(itemTouchHelperCallback).apply {

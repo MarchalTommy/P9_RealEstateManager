@@ -27,7 +27,6 @@ data class House(
     @PrimaryKey(autoGenerate = true)
     var houseId: Int = 0
 
-    //TODO : work the price so that it matches a price tag. Regex probably
     fun currencyFormatUS(amount: Int = price): String {
         val COUNTRY = "US"
         val LANGUAGE = "en"

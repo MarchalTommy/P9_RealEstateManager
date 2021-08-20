@@ -227,7 +227,7 @@ class EditItemFragment(private var house: House) : Fragment() {
     // PICTURE STUFF
     //CAMERA
     private fun startCamera() {
-        if (askForCameraPermissions()) {
+        if (isCameraPermissionsAllowed()) {
             Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
                 takePictureIntent.resolveActivity(requireContext().packageManager)?.also {
                     val photoFile: File? = try {
@@ -281,7 +281,7 @@ class EditItemFragment(private var house: House) : Fragment() {
 
     //GALLERY
     private fun startGallery() {
-        if (askForStoragePermissions()) {
+        if (isPermissionsAllowed()) {
             val intent = Intent(Intent.ACTION_PICK)
             intent.type = "image/*"
             val mimeTypes: ArrayList<String> = ArrayList(3)
@@ -353,6 +353,8 @@ class EditItemFragment(private var house: House) : Fragment() {
                 )
             }
             return false
+        } else {
+//            startGallery()
         }
         return true
     }
@@ -373,6 +375,8 @@ class EditItemFragment(private var house: House) : Fragment() {
                 )
             }
             return false
+        } else {
+//            startCamera()
         }
         return true
     }

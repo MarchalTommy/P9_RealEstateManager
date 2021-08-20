@@ -8,11 +8,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.R
-import com.openclassrooms.realestatemanager.Utils
-import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
+import com.openclassrooms.realestatemanager.database.entities.Address
+import com.openclassrooms.realestatemanager.database.entities.House
 
 class ListFragmentAdapter(
-    val dataSet: List<HouseAndAddress>,
+    val dataSet: List<House>,
+    val dataSet2: List<Address>,
     private val onClick: (Int) -> Unit
 ) :
     RecyclerView.Adapter<ListFragmentAdapter.ViewHolder>() {
@@ -25,22 +26,23 @@ class ListFragmentAdapter(
 
     // TODO : voir avec Virgile, compatibilité prix EUR ?
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentItem = dataSet[position]
-        holder.houseType.text = currentItem.house.type
+        val currentEstate = dataSet[position]
+        val currentAddress = dataSet2[position]
+        holder.houseType.text = currentEstate.type
 
-        holder.houseLocation.text = currentItem.address.city
+        holder.houseLocation.text = currentAddress.city
 
-        holder.housePrice.text = currentItem.house.currencyFormatUS()
+        holder.housePrice.text = currentEstate.currencyFormatUS()
 
         Glide.with(holder.itemView)
-            .load(currentItem.house.mainUri)
+            .load(currentEstate.mainUri)
             .into(holder.housePic)
 
-        if (!currentItem.house.stillAvailable) {
+        if (!currentEstate.stillAvailable) {
             holder.soldBanner.visibility = View.VISIBLE
             holder.soldText.visibility = View.VISIBLE
             holder.soldDate.visibility = View.VISIBLE
-            holder.soldDate.text = "Sold the ${Utils.getTodayDate()}"
+            holder.soldDate.text = "Sold the ${currentEstate.dateSell}"
         } else {
             holder.soldBanner.visibility = View.GONE
             holder.soldText.visibility = View.GONE
@@ -48,14 +50,18 @@ class ListFragmentAdapter(
         }
 
         holder.itemView.setOnClickListener {
-                onClick(currentItem.house.houseId)
+            onClick(currentEstate.houseId!!)
         }
     }
 
     override fun getItemCount() = dataSet.size
 
-    fun getItemAt(position: Int): HouseAndAddress {
+    fun getEstateAt(position: Int): House {
         return dataSet[position]
+    }
+
+    fun getAddressAt(position: Int): Address {
+        return dataSet2[position]
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

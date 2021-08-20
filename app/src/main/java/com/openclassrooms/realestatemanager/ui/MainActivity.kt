@@ -8,6 +8,7 @@ import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.navigation.NavigationView
 import com.openclassrooms.realestatemanager.EstateApplication
@@ -19,6 +20,8 @@ import com.openclassrooms.realestatemanager.ui.mainList.ListFragment
 import com.openclassrooms.realestatemanager.ui.search.BaseSearchFragment
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.ArrayList
 
 class MainActivity : AppCompatActivity() {

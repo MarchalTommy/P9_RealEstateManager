@@ -6,10 +6,10 @@ import com.openclassrooms.realestatemanager.database.entities.Address
 import com.openclassrooms.realestatemanager.database.entities.House
 
 data class HouseAndAddress(
-        @Embedded val house: House,
-        @Relation(
-                parentColumn = "houseId",
-                entityColumn = "houseId"
-        )
-        val address: Address
+    @Embedded val house: House,
+    @Relation(
+        parentColumn = "houseId",
+        entityColumn = "houseId"
+    )
+    val address: Address
 )

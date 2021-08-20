@@ -15,19 +15,25 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
     // region GETTERS
     val allHouses: LiveData<List<House>> = repository.allHouses.asLiveData()
 
-    val allHousesWithAddress: LiveData<List<HouseAndAddress>> =
-        repository.allHousesWithAddress.asLiveData()
+    val allAddresses: LiveData<List<Address>> = repository.allAddresses.asLiveData()
+
+    val allHousesAndAddresses: LiveData<List<HouseAndAddress>> =
+        repository.allHousesAndAddresses.asLiveData()
+
+    fun getHouseAndAddress(houseId: Int): LiveData<List<HouseAndAddress>> {
+        return repository.getHouseAndAddress(houseId).asLiveData()
+    }
 
     fun getHouseWithId(houseId: Int): LiveData<House> {
         return repository.getHouseWithId(houseId).asLiveData()
     }
 
-    fun getAddressFromHouse(houseId: Int): LiveData<Address> {
-        return repository.getAddressFromHouse(houseId).asLiveData()
+    fun getHouseFromAddressId(addressId: Int): LiveData<House> {
+        return repository.getHouseFromAddressId(addressId).asLiveData()
     }
 
-    fun getHouseWithAddress(houseId: Int): LiveData<List<HouseAndAddress>> {
-        return repository.getHouseWithAddress(houseId).asLiveData()
+    fun getAddressFromHouse(houseId: Int): LiveData<Address> {
+        return repository.getAddressFromHouse(houseId).asLiveData()
     }
 
     fun getAgent(agentId: Int): LiveData<Agent> {
@@ -36,6 +42,10 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
 
     fun getPictures(houseId: Int): LiveData<List<Picture>> {
         return repository.getPictures(houseId).asLiveData()
+    }
+
+    fun getStaticMap(address: String, api: String): String {
+        return repository.getStaticMap(address, api)
     }
 
     fun searchHouse(
@@ -50,7 +60,7 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
         bathroomMax: Int = 1000,
         bathroomMin: Int = 1,
         type: String = "Villa"
-    ): LiveData<List<HouseAndAddress>> {
+    ): LiveData<List<House>> {
         return repository.searchHouse(
             priceMax,
             priceMin,
@@ -68,24 +78,25 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
     // endregion GETTERS
 
     // region INSERTS
-    fun insertHouse(house: House) = viewModelScope.launch {
+
+    fun insertHouse(house: House) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertHouse(house)
     }
 
-    fun insertAddress(address: Address) = viewModelScope.launch {
+    fun insertAddress(address: Address) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertAddress(address)
     }
 
-    fun insertAgent(agent: Agent) = viewModelScope.launch {
+    fun insertAgent(agent: Agent) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertAgent(agent)
     }
 
-    fun insertPicture(picture: Picture) = viewModelScope.launch {
+    fun insertPicture(picture: Picture) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertPicture(picture)
     }
     // endregion INSERTS
 
-    // region UPDATES
+    // region UPDATE
     fun updateHouse(house: House) = viewModelScope.launch(Dispatchers.IO) {
         repository.updateHouse(house)
     }
@@ -94,16 +105,24 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
         repository.updateAddress(address)
     }
 
+    // endregion UPDATE
+
+    // region DELETE
     fun removePicture(picture: Picture) = viewModelScope.launch(Dispatchers.IO) {
         repository.removePicture(picture)
     }
-    // endregion UPDATES
 
-    fun getStaticMap(address: String, api: String): String {
-        return repository.getStaticMap(address, api)
+    fun removeAddress(address: Address) = viewModelScope.launch(Dispatchers.IO) {
+        repository.removeAddress(address)
     }
+
+    fun removeHouse(house: House) = viewModelScope.launch(Dispatchers.IO) {
+        repository.removeHouse(house)
+    }
+    // endregion DELETE
 }
 
+//ViewModel Factory
 class HouseViewModelFactory(private val repository: HouseRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HouseViewModel::class.java)) {

@@ -121,12 +121,12 @@ abstract class EstateDatabase : RoomDatabase() {
             )
 
             val addresses = listOf(
-                Address("13 Woodstone Dr", "", 70471, "Mandeville", 1),
-                Address("22358 Crane St", "", 70449, "Maurepas", 3),
-                Address("951 7th St", "", 70767, "Port Allen", 4),
-                Address("121 Pailet Dr", "", 70058, "Harvey", 2),
-                Address("137 Myia Ln", "", 70517, "Breaux Bridge", 5),
-                Address("2420 N Claiborne Ave", "", 70117, "New Orleans", 6)
+                Address(0, "13 Woodstone Dr", "", 70471, "Mandeville", 1),
+                Address(0, "22358 Crane St", "", 70449, "Maurepas", 3),
+                Address(0, "951 7th St", "", 70767, "Port Allen", 4),
+                Address(0, "121 Pailet Dr", "", 70058, "Harvey", 2),
+                Address(0, "137 Myia Ln", "", 70517, "Breaux Bridge", 5),
+                Address(0, "2420 N Claiborne Ave", "", 70117, "New Orleans", 6)
             )
             val agents = listOf(
                 Agent("Josh", "0601020304", "Josh.Joshy@gmail.com"),
@@ -137,31 +137,31 @@ abstract class EstateDatabase : RoomDatabase() {
                 House(
                     81450000, "Mansion", 1250, 21,
                     8, 5, " ", true,
-                    "27/05/2020", " ", 1, 1, uriMansion
+                    "27/05/2020", " ", 1, 3, uriMansion
                 ),
 
                 House(
                     1325000, "Villa", 650, 12,
                     5, 3, " ", true,
-                    "27/05/2020", " ", 2, 4, uriVilla2
+                    "27/05/2020", " ", 2, 2, uriVilla2
                 ),
 
                 House(
                     650000, "Villa", 350, 6,
                     2, 1, " ", false,
-                    "27/05/2020", "29/06/2021", 3, 2, uriVilla3
+                    "27/05/2020", "29/06/2021", 3, 5, uriVilla3
                 ),
 
                 House(
                     1000000, "Villa", 600, 8,
                     3, 2, " ", true,
-                    "27/05/2020", " ", 3, 3, uriVilla4
+                    "27/05/2020", " ", 3, 1, uriVilla4
                 ),
 
                 House(
                     735000, "Villa", 250, 5,
                     3, 1, " ", true,
-                    "27/05/2020", " ", 1, 5, uriVilla1
+                    "27/05/2020", " ", 1, 4, uriVilla1
                 ),
 
                 House(

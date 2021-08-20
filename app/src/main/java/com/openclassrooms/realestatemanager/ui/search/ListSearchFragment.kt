@@ -23,8 +23,8 @@ import com.google.android.material.slider.RangeSlider
 import com.openclassrooms.realestatemanager.EstateApplication
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.Utils
+import com.openclassrooms.realestatemanager.database.entities.Address
 import com.openclassrooms.realestatemanager.database.entities.House
-import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
 import com.openclassrooms.realestatemanager.databinding.FragmentListBinding
 import com.openclassrooms.realestatemanager.ui.detail.DetailFragment
 import com.openclassrooms.realestatemanager.ui.mainList.ListFragmentAdapter
@@ -46,8 +46,10 @@ class ListSearchFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var thisContext: Context
     private lateinit var adapter: ListFragmentAdapter
-    private var housesAndAddress: ArrayList<HouseAndAddress> = ArrayList()
-    private var filteredDataSet = ArrayList<HouseAndAddress>()
+    private var houses: ArrayList<House> = ArrayList()
+    private var addresses: ArrayList<Address> = ArrayList()
+    private var filteredDataSetEstate = ArrayList<House>()
+    private var filteredDataSetAddress = ArrayList<Address>()
 
     private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
@@ -84,23 +86,27 @@ class ListSearchFragment : Fragment() {
         lifecycleScope.launch(Dispatchers.Main) {
             Log.d(ContentValues.TAG, "getLocalHouses: Room call started, now fetching houses...")
 
-            houseViewModel.allHousesWithAddress.observe(viewLifecycleOwner, {
-                housesAndAddress = it as ArrayList<HouseAndAddress>
+            houseViewModel.allHouses.observe(viewLifecycleOwner, {
+                houses = it as ArrayList<House>
+                houseViewModel.allAddresses.observe(viewLifecycleOwner, { addressList ->
+                    addresses = addressList as ArrayList<Address>
+                    prepareAdapter(houses, addresses)
 
-                prepareAdapter(housesAndAddress)
+                })
+
             })
         }
     }
 
-    private fun prepareAdapter(dataSet: List<HouseAndAddress>) {
-        adapter = ListFragmentAdapter(dataSet, ::listOnClick)
+    private fun prepareAdapter(dataSet: List<House>, dataSet2: List<Address>) {
+        adapter = ListFragmentAdapter(dataSet, dataSet2, ::listOnClick)
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(thisContext)
         recyclerView.setHasFixedSize(true)
     }
 
-    private fun filterList(dataSet: List<HouseAndAddress>) {
-        recyclerView.adapter = ListFragmentAdapter(dataSet, ::listOnClick)
+    private fun filterList(dataSet: List<House>, dataSet2: List<Address>) {
+        recyclerView.adapter = ListFragmentAdapter(dataSet, dataSet2, ::listOnClick)
         recyclerView.layoutManager = LinearLayoutManager(thisContext)
         recyclerView.setHasFixedSize(true)
     }
@@ -109,7 +115,6 @@ class ListSearchFragment : Fragment() {
         lateinit var houseClicked: House
         houseViewModel.getHouseWithId(houseId).observe(viewLifecycleOwner, {
             houseClicked = it
-
             lifecycleScope.launch(Dispatchers.Main) {
                 if (Utils.isLandscape(thisContext)) {
                     parentFragmentManager.beginTransaction()
@@ -151,15 +156,15 @@ class ListSearchFragment : Fragment() {
         var moreRooms = 0
         var moreBedrooms = 0
         var moreBathrooms = 0
-        for (h1 in housesAndAddress) {
-            if (moreRooms <= h1.house.nbrRooms) {
-                moreRooms = h1.house.nbrRooms
+        for (h1 in houses) {
+            if (moreRooms <= h1.nbrRooms) {
+                moreRooms = h1.nbrRooms
             }
-            if (moreBedrooms <= h1.house.nbrBedrooms) {
-                moreBedrooms = h1.house.nbrBedrooms
+            if (moreBedrooms <= h1.nbrBedrooms) {
+                moreBedrooms = h1.nbrBedrooms
             }
-            if (moreBathrooms <= h1.house.nbrBathrooms) {
-                moreBathrooms = h1.house.nbrBathrooms
+            if (moreBathrooms <= h1.nbrBathrooms) {
+                moreBathrooms = h1.nbrBathrooms
             }
         }
         val roomSlider = dialogView.findViewById<RangeSlider>(R.id.room_slider)
@@ -183,8 +188,12 @@ class ListSearchFragment : Fragment() {
             val radioButtonId = typeRadioGroup.checkedRadioButtonId
             val radio = typeRadioGroup.findViewById<RadioButton>(radioButtonId)
 
-            if(radio == null) {
-                Toast.makeText(requireContext(), "You need to select an estate type !", Toast.LENGTH_LONG).show()
+            if (radio == null) {
+                Toast.makeText(
+                    requireContext(),
+                    "You need to select an estate type !",
+                    Toast.LENGTH_LONG
+                ).show()
             } else {
                 houseViewModel.searchHouse(
                     priceMax = priceSlider.values[1].toInt(),
@@ -199,10 +208,18 @@ class ListSearchFragment : Fragment() {
                     bathroomMin = bathroomSlider.values[0].toInt(),
                     type = radio.text as String
                 ).observe(viewLifecycleOwner, {
-                    filteredDataSet.clear()
-                    filteredDataSet.addAll(it)
-                    filterList(filteredDataSet)
-                    dialog.dismiss()
+                    filteredDataSetEstate.clear()
+                    filteredDataSetAddress.clear()
+                    filteredDataSetEstate.addAll(it)
+                    for (estate in it) {
+                        houseViewModel.getAddressFromHouse(estate.houseId)
+                            .observe(viewLifecycleOwner, { addressList ->
+                                filteredDataSetAddress.add(addressList)
+                                filterList(filteredDataSetEstate, filteredDataSetAddress)
+                                dialog.dismiss()
+                            })
+                    }
+
                 })
             }
         }

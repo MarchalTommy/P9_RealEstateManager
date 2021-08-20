@@ -12,6 +12,7 @@ import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.ListFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearSnapHelper
@@ -38,6 +39,7 @@ import kotlinx.coroutines.launch
 
 class DetailFragment(houseClicked: House) : Fragment() {
 
+    //TODO : backstack après ajout
     private val houseViewModel: HouseViewModel by viewModels {
         HouseViewModelFactory((this.activity?.application as EstateApplication).repository)
     }
@@ -59,6 +61,7 @@ class DetailFragment(houseClicked: House) : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar.menu.findItem(R.id.add).isEnabled = true
         toolbar.menu.findItem(R.id.edit).isEnabled = true
         toolbar.menu.findItem(R.id.edit).setOnMenuItemClickListener {
             if (Utils.isLandscape(context)) {
@@ -89,7 +92,12 @@ class DetailFragment(houseClicked: House) : Fragment() {
             true // default to enabled
         ) {
             override fun handleOnBackPressed() {
-                parentFragmentManager.popBackStack()
+                if (parentFragmentManager.backStackEntryCount >= 1)
+                    parentFragmentManager.popBackStack()
+                else
+                    parentFragmentManager.beginTransaction()
+                        .replace(R.id.main_fragment_portrait, ListFragment())
+                        .commitNow()
                 if (this@DetailFragment.parentFragment != null) {
                     bottomBar.visibility = View.VISIBLE
                 }
@@ -115,11 +123,10 @@ class DetailFragment(houseClicked: House) : Fragment() {
         isLandscape = Utils.isLandscape(requireContext())
 
         getDBData()
-
         binding.detailDescription.text = mHouse.description
-
         initDataRecyclerView()
 
+        Log.d(TAG, "onViewCreated: BACKSTACK -> ${parentFragmentManager.backStackEntryCount}")
         if (parentFragmentManager.backStackEntryCount > 1) {
             parentFragmentManager.popBackStack()
         }
@@ -153,23 +160,30 @@ class DetailFragment(houseClicked: House) : Fragment() {
 
     private fun getDBData() {
         houseViewModel.getAddressFromHouse(mHouse.houseId).observe(viewLifecycleOwner, {
-            address = it
-            initLayout()
-            fabStaticMap()
+            if (it != null) {
+                address = it
+                initLayout()
+                fabStaticMap()
+            }
         })
         houseViewModel.getPictures(mHouse.houseId).observe(viewLifecycleOwner, {
-            initMediaRecyclerView(it)
+            if (it != null) {
+                initMediaRecyclerView(it)
+            }
         })
         houseViewModel.getAgent(mHouse.agentId).observe(viewLifecycleOwner, {
-            agent = it
-            finishLayout()
+            if (it != null) {
+
+                agent = it
+                finishLayout()
+            }
         })
     }
 
     private fun initMediaRecyclerView(dataSet: List<Picture>) {
         binding.detailMediaRv.adapter = PictureListAdapter(dataSet, isLandscape)
         binding.detailMediaRv.setHasFixedSize(true)
-        binding.detailMediaRv.onFlingListener = null;
+        binding.detailMediaRv.onFlingListener = null
         val snapHelper: SnapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(binding.detailMediaRv)
     }
@@ -177,7 +191,7 @@ class DetailFragment(houseClicked: House) : Fragment() {
     private fun initDataRecyclerView() {
         binding.detailDataRv.adapter = DataDetailAdapter(getDataSet(), getDrawables())
         binding.detailDataRv.setHasFixedSize(true)
-        binding.detailDataRv.onFlingListener = null;
+        binding.detailDataRv.onFlingListener = null
         val snapHelper: SnapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(binding.detailDataRv)
 

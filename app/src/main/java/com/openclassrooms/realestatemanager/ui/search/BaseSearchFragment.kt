@@ -1,30 +1,18 @@
 package com.openclassrooms.realestatemanager.ui.search
 
-import android.app.FragmentManager
 import android.os.Bundle
 import android.view.*
-import androidx.activity.addCallback
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.add
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.NavigationUI.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import androidx.recyclerview.widget.RecyclerView
+import com.araujo.jordan.excuseme.ExcuseMe
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.Utils
 import com.openclassrooms.realestatemanager.databinding.FragmentSearchBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.lang.Math.abs
 
 class BaseSearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
@@ -43,8 +31,8 @@ class BaseSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         childFragmentManager.beginTransaction()
-                        .add(R.id.search_container, ListSearchFragment())
-                        .commit()
+            .add(R.id.search_container, ListSearchFragment())
+            .commit()
         bottomNav = binding.bottomNavBar
 
         bottomNav.setOnItemSelectedListener { item ->
@@ -57,10 +45,21 @@ class BaseSearchFragment : Fragment() {
                 R.id.mapSearch -> {
                     lifecycleScope.launch(Dispatchers.IO) {
                         if (Utils.isOnline()) {
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                childFragmentManager.beginTransaction()
-                                    .replace(R.id.search_container, MapFragment())
-                                    .commit()
+                            ExcuseMe.couldYouGive(requireContext()).permissionFor(
+                                android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                                android.Manifest.permission.ACCESS_FINE_LOCATION
+                            ) {
+                                if (it.granted.contains(android.Manifest.permission.ACCESS_COARSE_LOCATION) &&
+                                    it.granted.contains(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                                ) {
+                                    //TODO LANCER LA LOCALISATION DE L'USER
+                                    lifecycleScope.launch(Dispatchers.Main) {
+                                        childFragmentManager.beginTransaction()
+                                            .replace(R.id.search_container, MapFragment())
+                                            .commit()
+                                    }
+                                }
+
                             }
                         } else {
                             lifecycleScope.launch(Dispatchers.Main) {
@@ -70,6 +69,7 @@ class BaseSearchFragment : Fragment() {
                                     Snackbar.LENGTH_LONG
                                 ).show()
                                 bottomNav.selectedItemId = R.id.listSearch
+                                // TODO : mettre en place un worker pour prévenir en cas de retour de connection
                             }
                         }
                     }

@@ -18,6 +18,8 @@ import java.net.SocketAddress;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import kotlinx.coroutines.CoroutineScope;
 import kotlinx.coroutines.GlobalScope;
@@ -81,6 +83,12 @@ public class Utils {
 
     public static Boolean isTablet(Context context) {
         return context.getResources().getBoolean(R.bool.isTablet);
+    }
+
+    public static int idGenerator(){
+        Random rand = new Random(234978262);
+
+        return rand.nextInt();
     }
 
 //    public static void enableData(Context context, boolean enable) {

@@ -1,9 +1,5 @@
 package com.openclassrooms.realestatemanager.repository
 
-import android.content.ContentValues
-import android.util.Log
-import com.openclassrooms.realestatemanager.EstateApplication
-import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.dao.HouseDao
 import com.openclassrooms.realestatemanager.database.entities.Address
 import com.openclassrooms.realestatemanager.database.entities.Agent
@@ -17,18 +13,24 @@ class HouseRepository(private val houseDao: HouseDao) {
     // region GETTERS
     val allHouses: Flow<List<House>> = houseDao.getAllHouses()
 
-    val allHousesWithAddress: Flow<List<HouseAndAddress>> = houseDao.getAllHousesAndAddresses()
+    val allAddresses: Flow<List<Address>> = houseDao.getAllAddresses()
+
+    val allHousesAndAddresses: Flow<List<HouseAndAddress>> = houseDao.getAllHousesAndAddresses()
+
+    fun getHouseAndAddress(houseId: Int): Flow<List<HouseAndAddress>> {
+        return houseDao.getHouseAndAddress(houseId)
+    }
 
     fun getHouseWithId(id: Int): Flow<House> {
         return houseDao.getHouseWithId(id)
     }
 
-    fun getAddressFromHouse(houseId: Int): Flow<Address> {
-        return houseDao.getAddressFromHouse(houseId)
+    fun getHouseFromAddressId(addressId: Int): Flow<House> {
+        return houseDao.getHouseFromAddressId(addressId)
     }
 
-    fun getHouseWithAddress(houseId: Int): Flow<List<HouseAndAddress>> {
-        return houseDao.getHouseWithAddress(houseId)
+    fun getAddressFromHouse(houseId: Int): Flow<Address> {
+        return houseDao.getAddressFromHouse(houseId)
     }
 
     fun getAgent(agentId: Int): Flow<Agent> {
@@ -37,6 +39,10 @@ class HouseRepository(private val houseDao: HouseDao) {
 
     fun getPictures(houseId: Int): Flow<List<Picture>> {
         return houseDao.getPicturesFromHouse(houseId)
+    }
+
+    fun getStaticMap(address: String, api: String): String {
+        return "https://maps.googleapis.com/maps/api/staticmap?center=$address&zoom=15&size=300x300&scale=3&markers=color:red|$address&key=${api}"
     }
 
     fun searchHouse(
@@ -51,7 +57,7 @@ class HouseRepository(private val houseDao: HouseDao) {
         bathroomMax: Int,
         bathroomMin: Int,
         type: String
-    ): Flow<List<HouseAndAddress>> {
+    ): Flow<List<House>> {
         return houseDao.searchHouse(
             priceMax,
             priceMin,
@@ -68,8 +74,8 @@ class HouseRepository(private val houseDao: HouseDao) {
     }
     // endregion GETTERS
 
-
     // region INSERTS
+
     suspend fun insertHouse(house: House) {
         houseDao.insertHouse(house)
     }
@@ -87,6 +93,7 @@ class HouseRepository(private val houseDao: HouseDao) {
     }
     // endregion INSERTS
 
+    // region UPDATE
     fun updateHouse(house: House) {
         houseDao.updateHouse(house)
     }
@@ -94,14 +101,21 @@ class HouseRepository(private val houseDao: HouseDao) {
     fun updateAddress(address: Address) {
         houseDao.updateAddress(address)
     }
+    // endregion UPDATE
 
+    // region DELETE
     fun removePicture(picture: Picture) {
         houseDao.removePicture(picture)
     }
 
-    fun getStaticMap(address: String, api: String): String {
-        return "https://maps.googleapis.com/maps/api/staticmap?center=$address&zoom=15&size=300x300&scale=3&markers=color:red|$address&key=${api}"
+    fun removeAddress(address: Address) {
+        houseDao.removeAddress(address)
     }
+
+    fun removeHouse(house: House) {
+        houseDao.removeHouse(house)
+    }
+    // endregion DELETE
 
 
 }
