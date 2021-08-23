@@ -48,7 +48,7 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
         return repository.getStaticMap(address, api)
     }
 
-    fun searchHouse(
+    fun searchHouseAndAddress(
         priceMax: Int = 999999999,
         priceMin: Int = 0,
         sizeMax: Int = 999999999,
@@ -60,8 +60,8 @@ class HouseViewModel(private val repository: HouseRepository) : ViewModel() {
         bathroomMax: Int = 1000,
         bathroomMin: Int = 1,
         type: String = "Villa"
-    ): LiveData<List<House>> {
-        return repository.searchHouse(
+    ): LiveData<List<HouseAndAddress>> {
+        return repository.searchHouseAndAddress(
             priceMax,
             priceMin,
             sizeMax,

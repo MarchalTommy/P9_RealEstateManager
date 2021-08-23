@@ -2,9 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@android:color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -30,8 +30,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:hint="Add a description here"
             app:boxBackgroundMode="outline"
             app:boxStrokeColor="@color/primaryColor"
@@ -81,7 +81,6 @@
             app:boxStrokeColor="@color/primaryColor"
             app:boxStrokeWidth="1dp"
             app:boxStrokeWidthFocused="2dp"
-            app:errorEnabled="true"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
@@ -96,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="none"
                 android:importantForAutofill="no"
-                android:inputType="textNoSuggestions"
+                android:inputType="number"
                 android:maxHeight="50dp"
                 android:minLines="1" />
 
@@ -117,7 +116,6 @@
             app:boxStrokeWidthFocused="2dp"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
-            app:errorEnabled="true"
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryColor"
             app:layout_constraintEnd_toEndOf="parent"
@@ -130,7 +128,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="none"
                 android:importantForAutofill="no"
-                android:inputType="textNoSuggestions"
+                android:inputType="textCapWords"
                 android:maxHeight="50dp"
                 android:minLines="1" />
 
@@ -149,7 +147,6 @@
             app:boxStrokeColor="@color/primaryColor"
             app:boxStrokeWidth="1dp"
             app:boxStrokeWidthFocused="2dp"
-            app:errorEnabled="true"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
@@ -183,7 +180,6 @@
             app:boxStrokeColor="@color/primaryColor"
             app:boxStrokeWidth="1dp"
             app:boxStrokeWidthFocused="2dp"
-            app:errorEnabled="true"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
@@ -216,7 +212,6 @@
             app:boxStrokeColor="@color/primaryColor"
             app:boxStrokeWidth="1dp"
             app:boxStrokeWidthFocused="2dp"
-            app:errorEnabled="true"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
@@ -249,7 +244,6 @@
             app:boxStrokeColor="@color/primaryColor"
             app:boxStrokeWidth="1dp"
             app:boxStrokeWidthFocused="2dp"
-            app:errorEnabled="true"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
             app:hintEnabled="true"
@@ -297,7 +291,6 @@
             app:boxStrokeWidthFocused="2dp"
             app:expandedHintEnabled="true"
             app:hintAnimationEnabled="true"
-            app:errorEnabled="true"
             app:hintEnabled="true"
             app:hintTextColor="@color/secondaryColor"
             app:layout_constraintEnd_toEndOf="parent"
@@ -352,7 +345,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            app:errorEnabled="true"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
             android:hint="Zip code"
@@ -385,7 +377,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            app:errorEnabled="true"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
             android:hint="City"
@@ -407,7 +398,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="none"
                 android:importantForAutofill="no"
-                android:inputType="text"
+                android:inputType="textCapWords"
                 android:minLines="1" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -417,25 +408,13 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="64dp"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:text="Add new media"
             android:textColor="@color/primaryColor"
             android:textSize="16sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/location_city_layout" />
-
-        <Button
-            android:id="@+id/remove_media_button"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
-            android:text="Remove a media"
-            android:textColor="@color/primaryColor"
-            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/location_city_layout" />
 
         <LinearLayout

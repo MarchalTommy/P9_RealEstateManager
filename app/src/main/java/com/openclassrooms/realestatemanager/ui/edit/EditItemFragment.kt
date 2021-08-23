@@ -1,20 +1,17 @@
 package com.openclassrooms.realestatemanager.ui.edit
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
+import android.os.Environment.DIRECTORY_PICTURES
 import android.provider.MediaStore
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,8 +20,6 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -53,8 +48,6 @@ class EditItemFragment(private var house: House) : Fragment() {
     private val houseViewModel: HouseViewModel by viewModels {
         HouseViewModelFactory((this.activity?.application as EstateApplication).repository)
     }
-    private val GALLERY_REQUEST = 24
-    private val CAMERA_REQUEST = 1
     private lateinit var currentPhotoPath: String
     private lateinit var address: Address
 
@@ -197,7 +190,95 @@ class EditItemFragment(private var house: House) : Fragment() {
         binding.houseMediaRvDetail.adapter?.notifyDataSetChanged()
     }
 
-    //DIALOG TO VALIDATE THE PHOTO AND ADD TITLE
+    // PICTURE STUFF
+    // CAMERA
+    private fun startCamera() {
+        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+            takePictureIntent.resolveActivity(requireContext().packageManager)?.also {
+                val photoFile: File? = try {
+                    createImageFile()
+                } catch (ex: IOException) {
+                    Toast.makeText(
+                        requireContext(),
+                        "An error has happened while trying to create the new file",
+                        Toast.LENGTH_LONG
+                    ).show()
+                    null
+                }
+                //Continue only if the file was successfully created :
+                photoFile?.also {
+                    val photoUri: Uri = FileProvider.getUriForFile(
+                        requireContext(),
+                        "com.openclassrooms.realestatemanager.fileprovider",
+                        photoFile
+                    )
+                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                    cameraResultLauncher.launch(takePictureIntent)
+                }
+            }
+        }
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        val storageDir: File = requireActivity().getExternalFilesDir(DIRECTORY_PICTURES)!!
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        ).apply {
+            // Save the file : path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }
+    }
+
+    private fun galleryAddPic() {
+        val file = File(currentPhotoPath)
+        MediaScannerConnection.scanFile(requireContext(), arrayOf(file.toString()), null, null)
+    }
+
+    // GALLERY
+    private fun startGallery() {
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        val mimeTypes: ArrayList<String> = ArrayList(3)
+        mimeTypes.add("image/jpeg")
+        mimeTypes.add("image/png")
+        mimeTypes.add("image/jpg")
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
+        galleryResultLauncher.launch(intent)
+    }
+
+    // INTENTS RESULTS (onActivityResult is deprecated)
+    private var galleryResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val data: Intent = result.data!!
+                mediaDialog(data.data!!)
+            }
+        }
+
+    private var cameraResultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                galleryAddPic()
+                val bitmap: Bitmap = BitmapFactory.decodeFile(currentPhotoPath)
+                val bytes = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+                val path: String = MediaStore.Images.Media.insertImage(
+                    requireActivity().contentResolver,
+                    bitmap,
+                    "Title",
+                    null
+                )
+                val uri = Uri.parse(path)
+                mediaDialog(uri)
+            }
+        }
+
+    // DIALOG TO VALIDATE THE PHOTO AND ADD TITLE
     private fun mediaDialog(uri: Uri) {
         val inflater: LayoutInflater = this.layoutInflater
         val dialogView: View = inflater.inflate(R.layout.dialog_selected_media, null)
@@ -222,205 +303,5 @@ class EditItemFragment(private var house: House) : Fragment() {
         dialogBuilder.setView(dialogView)
         val alertDialog = dialogBuilder.create()
         alertDialog.show()
-    }
-
-    // PICTURE STUFF
-    //CAMERA
-    private fun startCamera() {
-        if (isCameraPermissionsAllowed()) {
-            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-                takePictureIntent.resolveActivity(requireContext().packageManager)?.also {
-                    val photoFile: File? = try {
-                        createImageFile()
-                    } catch (ex: IOException) {
-                        Toast.makeText(
-                            requireContext(),
-                            "An error has happened while trying to create the new file",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        null
-                    }
-                    //Continue only if the file was successfully created :
-                    photoFile?.also {
-                        val photoUri: Uri = FileProvider.getUriForFile(
-                            requireContext(),
-                            "com.openclassrooms.realestatemanager.fileprovider",
-                            photoFile
-                        )
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-                        cameraResultLauncher.launch(takePictureIntent)
-                    }
-                }
-            }
-        } else {
-            askForCameraPermissions()
-        }
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        val storageDir: File =
-            requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        return File.createTempFile(
-            "JPEG_${timeStamp}_",
-            ".jpg",
-            storageDir
-        ).apply {
-            // Save the file : path for use with ACTION_VIEW intents
-            currentPhotoPath = absolutePath
-        }
-    }
-
-    private fun galleryAddPic() {
-        askForStoragePermissions()
-        val file = File(currentPhotoPath)
-        MediaScannerConnection.scanFile(requireContext(), arrayOf(file.toString()), null, null)
-    }
-
-    //GALLERY
-    private fun startGallery() {
-        if (isPermissionsAllowed()) {
-            val intent = Intent(Intent.ACTION_PICK)
-            intent.type = "image/*"
-            val mimeTypes: ArrayList<String> = ArrayList(3)
-            mimeTypes.add("image/jpeg")
-            mimeTypes.add("image/png")
-            mimeTypes.add("image/jpg")
-            intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes)
-            galleryResultLauncher.launch(intent)
-        } else {
-            askForStoragePermissions()
-        }
-    }
-
-    //INTENTS RESULTS (onActivityResult is deprecated)
-    private var galleryResultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val data: Intent = result.data!!
-                mediaDialog(data.data!!)
-            }
-        }
-
-    private var cameraResultLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                galleryAddPic()
-                val bitmap: Bitmap = BitmapFactory.decodeFile(currentPhotoPath)
-                val bytes = ByteArrayOutputStream()
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
-                val path: String = MediaStore.Images.Media.insertImage(
-                    requireActivity().contentResolver,
-                    bitmap,
-                    "Title",
-                    null
-                )
-                val uri = Uri.parse(path)
-                mediaDialog(uri)
-            }
-        }
-
-    // PERMISSIONS MANAGEMENT
-    private fun isPermissionsAllowed(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun isCameraPermissionsAllowed(): Boolean {
-        return ContextCompat.checkSelfPermission(
-            requireContext(),
-            Manifest.permission.CAMERA
-        ) == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun askForStoragePermissions(): Boolean {
-        if (!isPermissionsAllowed()) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this.requireActivity() as Activity,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                )
-            ) {
-                showPermissionDeniedDialog()
-            } else {
-                ActivityCompat.requestPermissions(
-                    this.requireActivity() as Activity,
-                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                    GALLERY_REQUEST
-                )
-            }
-            return false
-        } else {
-//            startGallery()
-        }
-        return true
-    }
-
-    private fun askForCameraPermissions(): Boolean {
-        if (!isCameraPermissionsAllowed()) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this.requireActivity() as Activity,
-                    Manifest.permission.CAMERA
-                )
-            ) {
-                showPermissionDeniedDialog()
-            } else {
-                ActivityCompat.requestPermissions(
-                    this.requireActivity() as Activity,
-                    arrayOf(Manifest.permission.CAMERA),
-                    CAMERA_REQUEST
-                )
-            }
-            return false
-        } else {
-//            startCamera()
-        }
-        return true
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        when (requestCode) {
-            CAMERA_REQUEST -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startCamera()
-                } else {
-                    askForCameraPermissions()
-                }
-                return
-            }
-            GALLERY_REQUEST -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startGallery()
-                } else {
-                    askForStoragePermissions()
-                }
-                return
-            }
-        }
-    }
-
-    private fun showPermissionDeniedDialog() {
-        AlertDialog.Builder(this.requireActivity())
-            .setTitle("Permission Denied")
-            .setMessage("Permission is denied, Please allow permissions from App Settings.")
-            .setPositiveButton(
-                "App Settings"
-            ) { _, _ ->
-                // send to app settings if permission is denied permanently
-                val intent = Intent()
-                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                val uri = Uri.fromParts("package", this.requireActivity().packageName, null)
-                intent.data = uri
-                startActivity(intent)
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
     }
 }

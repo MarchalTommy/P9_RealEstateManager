@@ -57,8 +57,18 @@ interface HouseDao {
     @Query("SELECT * FROM picture WHERE houseId = :houseId")
     fun getPicturesFromHouse(houseId: Int): Flow<List<Picture>>
 
+    // TRANSACTION HOUSE ADDRESS
+    @Transaction
+    @Query("SELECT * FROM house WHERE houseId = :houseId")
+    fun getHouseAndAddress(houseId: Int): Flow<List<HouseAndAddress>>
+
+    @Transaction
+    @Query("SELECT * FROM house")
+    fun getAllHousesAndAddresses(): Flow<List<HouseAndAddress>>
+
+    @Transaction
     @Query("SELECT * FROM house WHERE price BETWEEN :priceMin AND :priceMax AND size BETWEEN :sizeMin AND :sizeMax AND nbrRooms BETWEEN :roomMin AND :roomMax AND nbrBedrooms BETWEEN :bedroomMin AND :bedroomMax AND nbrBathrooms BETWEEN :bathroomMin AND :bathroomMax AND type = :type")
-    fun searchHouse(
+    fun searchHousesAndAddresses(
         priceMax: Int,
         priceMin: Int,
         sizeMax: Int,
@@ -70,16 +80,7 @@ interface HouseDao {
         bathroomMax: Int,
         bathroomMin: Int,
         type: String
-    ): Flow<List<House>>
-
-    // TRANSACTION HOUSE ADDRESS
-    @Transaction
-    @Query("SELECT * FROM house WHERE houseId = :houseId")
-    fun getHouseAndAddress(houseId: Int): Flow<List<HouseAndAddress>>
-
-    @Transaction
-    @Query("SELECT * FROM house")
-    fun getAllHousesAndAddresses(): Flow<List<HouseAndAddress>>
+    ): Flow<List<HouseAndAddress>>
     //endregion QUERY
 
     //region UPDATE

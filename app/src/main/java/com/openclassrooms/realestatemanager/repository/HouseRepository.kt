@@ -45,7 +45,7 @@ class HouseRepository(private val houseDao: HouseDao) {
         return "https://maps.googleapis.com/maps/api/staticmap?center=$address&zoom=15&size=300x300&scale=3&markers=color:red|$address&key=${api}"
     }
 
-    fun searchHouse(
+    fun searchHouseAndAddress(
         priceMax: Int,
         priceMin: Int,
         sizeMax: Int,
@@ -57,8 +57,8 @@ class HouseRepository(private val houseDao: HouseDao) {
         bathroomMax: Int,
         bathroomMin: Int,
         type: String
-    ): Flow<List<House>> {
-        return houseDao.searchHouse(
+    ): Flow<List<HouseAndAddress>> {
+        return houseDao.searchHousesAndAddresses(
             priceMax,
             priceMin,
             sizeMax,

@@ -10,10 +10,10 @@ import com.bumptech.glide.Glide
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.database.entities.Address
 import com.openclassrooms.realestatemanager.database.entities.House
+import com.openclassrooms.realestatemanager.database.entities.relations.HouseAndAddress
 
 class ListFragmentAdapter(
-    val dataSet: List<House>,
-    val dataSet2: List<Address>,
+    var dataSet: List<HouseAndAddress>,
     private val onClick: (Int) -> Unit
 ) :
     RecyclerView.Adapter<ListFragmentAdapter.ViewHolder>() {
@@ -26,8 +26,8 @@ class ListFragmentAdapter(
 
     // TODO : voir avec Virgile, compatibilité prix EUR ?
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentEstate = dataSet[position]
-        val currentAddress = dataSet2[position]
+        val currentEstate = dataSet[position].house
+        val currentAddress = dataSet[position].address
         holder.houseType.text = currentEstate.type
 
         holder.houseLocation.text = currentAddress.city
@@ -50,19 +50,11 @@ class ListFragmentAdapter(
         }
 
         holder.itemView.setOnClickListener {
-            onClick(currentEstate.houseId!!)
+            onClick(currentEstate.houseId)
         }
     }
 
     override fun getItemCount() = dataSet.size
-
-    fun getEstateAt(position: Int): House {
-        return dataSet[position]
-    }
-
-    fun getAddressAt(position: Int): Address {
-        return dataSet2[position]
-    }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val houseType: TextView = view.findViewById(R.id.house_type)

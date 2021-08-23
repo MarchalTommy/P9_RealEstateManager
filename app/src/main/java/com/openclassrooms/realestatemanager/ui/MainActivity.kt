@@ -9,20 +9,21 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import androidx.lifecycle.lifecycleScope
+import com.araujo.jordan.excuseme.ExcuseMe
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.openclassrooms.realestatemanager.EstateApplication
 import com.openclassrooms.realestatemanager.R
 import com.openclassrooms.realestatemanager.Utils
 import com.openclassrooms.realestatemanager.databinding.ActivityMainBinding
 import com.openclassrooms.realestatemanager.ui.addEstate.AddListItemFragment
 import com.openclassrooms.realestatemanager.ui.mainList.ListFragment
-import com.openclassrooms.realestatemanager.ui.search.BaseSearchFragment
+import com.openclassrooms.realestatemanager.ui.search.MapFragment
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.ArrayList
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -90,22 +91,48 @@ class MainActivity : AppCompatActivity() {
                 item.isEnabled = false
                 true
             }
-            R.id.search -> {
+            R.id.map -> {
                 // TODO: Implement some kind of search bar like P7 I THINK maybe idk
-                if (Utils.isTablet(this) || Utils.isLandscape(this)) {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.second_fragment_twopane, BaseSearchFragment())
-                        .commit()
-                    toolbar.title = "Search"
-                } else {
-                    supportFragmentManager.beginTransaction()
-                        .add(R.id.main_fragment_portrait, BaseSearchFragment())
-                        .addToBackStack("start")
-                        .commit()
-                    toolbar.title = "Search"
+                lifecycleScope.launch(Dispatchers.IO) {
+                    if (Utils.isOnline()) {
+                        ExcuseMe.couldYouGive(this@MainActivity).permissionFor(
+                            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                            android.Manifest.permission.ACCESS_FINE_LOCATION
+                        ) {
+                            if (it.granted.contains(android.Manifest.permission.ACCESS_COARSE_LOCATION) &&
+                                it.granted.contains(android.Manifest.permission.ACCESS_FINE_LOCATION)
+                            ) {
+                                //TODO LANCER LA LOCALISATION DE L'USER
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    supportFragmentManager.beginTransaction()
+                                        .replace(R.id.main_fragment_portrait, MapFragment(true))
+                                        .addToBackStack("main")
+                                        .commit()
+                                }
+                            } else {
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    supportFragmentManager.beginTransaction()
+                                        .replace(R.id.main_fragment_portrait, MapFragment(false))
+                                        .addToBackStack("main")
+                                        .commit()
+                                }
+
+                            }
+                        }
+                    } else {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            Snackbar.make(
+                                binding.root,
+                                "No internet connection available! Please verify that you have access to a network, or try again later.",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                            // TODO : mettre en place un worker pour prévenir en cas de retour de connection
+                        }
+                    }
                 }
                 menuItems.add(item)
                 item.isEnabled = false
+                toolbar.title = "MapView"
                 true
             }
             else -> super.onOptionsItemSelected(item)

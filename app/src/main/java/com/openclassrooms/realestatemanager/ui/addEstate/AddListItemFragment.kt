@@ -37,6 +37,7 @@ import com.openclassrooms.realestatemanager.database.entities.House
 import com.openclassrooms.realestatemanager.database.entities.Picture
 import com.openclassrooms.realestatemanager.databinding.FragmentAddBinding
 import com.openclassrooms.realestatemanager.ui.detail.DetailFragment
+import com.openclassrooms.realestatemanager.ui.mainList.ListFragment
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModel
 import com.openclassrooms.realestatemanager.viewmodel.HouseViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -190,11 +191,11 @@ class AddListItemFragment : Fragment() {
         //Navigate to the detail of the new house
         if (Utils.isLandscape(requireActivity())) {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.second_fragment_twopane, DetailFragment(newHouse))
+                .replace(R.id.second_fragment_twopane, ListFragment())
                 .commit()
         } else {
             parentFragmentManager.beginTransaction()
-                .replace(R.id.main_fragment_portrait, DetailFragment(newHouse))
+                .replace(R.id.main_fragment_portrait, ListFragment())
                 .commit()
         }
     }

@@ -38,17 +38,16 @@ import kotlinx.coroutines.launch
 
 
 class DetailFragment(houseClicked: House) : Fragment() {
-
     //TODO : backstack après ajout
+
     private val houseViewModel: HouseViewModel by viewModels {
         HouseViewModelFactory((this.activity?.application as EstateApplication).repository)
     }
-
     private var mHouse: House = houseClicked
     private var address: Address? = null
     private var agent: Agent? = null
     private var isLandscape: Boolean = false
-
+    private lateinit var toolbar: MaterialToolbar
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
 
@@ -56,12 +55,15 @@ class DetailFragment(houseClicked: House) : Fragment() {
         super.onDestroy()
         val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.menu.findItem(R.id.edit).isEnabled = false
+        toolbar.menu.findItem(R.id.add).isEnabled = true
+        toolbar.menu.findItem(R.id.map).isEnabled = true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
-        toolbar.menu.findItem(R.id.add).isEnabled = true
+        toolbar = requireActivity().findViewById(R.id.toolbar)
+        toolbar.menu.findItem(R.id.add).isEnabled = false
+        toolbar.menu.findItem(R.id.map).isEnabled = false
         toolbar.menu.findItem(R.id.edit).isEnabled = true
         toolbar.menu.findItem(R.id.edit).setOnMenuItemClickListener {
             if (Utils.isLandscape(context)) {
@@ -82,24 +84,16 @@ class DetailFragment(houseClicked: House) : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        lateinit var bottomBar: BottomNavigationView
-        if (this@DetailFragment.parentFragment != null) {
-            Log.d(TAG, "onCreate: ${requireParentFragment().id}")
-            bottomBar = requireParentFragment().requireView().findViewById(R.id.bottom_nav_bar)!!
-            bottomBar.visibility = View.GONE
-        }
         val callback: OnBackPressedCallback = object : OnBackPressedCallback(
             true // default to enabled
         ) {
             override fun handleOnBackPressed() {
-                if (parentFragmentManager.backStackEntryCount >= 1)
+                if (parentFragmentManager.backStackEntryCount >= 1) {
                     parentFragmentManager.popBackStack()
-                else
+                } else {
                     parentFragmentManager.beginTransaction()
                         .replace(R.id.main_fragment_portrait, ListFragment())
                         .commitNow()
-                if (this@DetailFragment.parentFragment != null) {
-                    bottomBar.visibility = View.VISIBLE
                 }
             }
         }
@@ -127,9 +121,9 @@ class DetailFragment(houseClicked: House) : Fragment() {
         initDataRecyclerView()
 
         Log.d(TAG, "onViewCreated: BACKSTACK -> ${parentFragmentManager.backStackEntryCount}")
-        if (parentFragmentManager.backStackEntryCount > 1) {
-            parentFragmentManager.popBackStack()
-        }
+//        if (parentFragmentManager.backStackEntryCount > 1) {
+//            parentFragmentManager.popBackStack()
+//        }
     }
 
     private fun initLayout() {
@@ -140,6 +134,7 @@ class DetailFragment(houseClicked: House) : Fragment() {
 
     private fun finishLayout() {
         binding.detailAgent.text = agent!!.toString()
+        binding.detailDateAdded?.text = "Added on ${mHouse.dateEntryOnMarket}"
     }
 
     private fun getDrawables(): List<Drawable> {
@@ -173,7 +168,6 @@ class DetailFragment(houseClicked: House) : Fragment() {
         })
         houseViewModel.getAgent(mHouse.agentId).observe(viewLifecycleOwner, {
             if (it != null) {
-
                 agent = it
                 finishLayout()
             }
@@ -194,7 +188,6 @@ class DetailFragment(houseClicked: House) : Fragment() {
         binding.detailDataRv.onFlingListener = null
         val snapHelper: SnapHelper = LinearSnapHelper()
         snapHelper.attachToRecyclerView(binding.detailDataRv)
-
     }
 
     private fun fabStaticMap() {
@@ -243,6 +236,5 @@ class DetailFragment(houseClicked: House) : Fragment() {
                 }
             }
         }
-
     }
 }

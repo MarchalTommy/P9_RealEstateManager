@@ -12,9 +12,9 @@
         android:title="Edit the property"
         app:showAsAction="always"/>
 
-    <item android:id="@+id/search"
-        android:icon="@drawable/ic_search_24"
-        android:title="Search"
+    <item android:id="@+id/map"
+        android:icon="@drawable/ic_twotone_map_24"
+        android:title="MapView"
         app:showAsAction="always"/>
 
 </menu>

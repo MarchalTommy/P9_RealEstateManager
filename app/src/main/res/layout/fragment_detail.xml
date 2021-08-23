@@ -9,7 +9,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/detail_media_rv"
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
@@ -18,17 +18,18 @@
         tools:listitem="@layout/model_detail_media" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/card_view_details"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="325dp"
+        android:layout_marginTop="-30dp"
         android:clickable="true"
         android:focusable="true"
         app:cardCornerRadius="32dp"
-        app:cardElevation="8dp"
+        app:cardElevation="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/detail_media_rv">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -80,8 +81,9 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/detail_data_rv"
                 android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:layout_marginTop="48dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:paddingBottom="16dp"
                 android:clickable="true"
                 android:clipToPadding="false"
                 android:focusable="true"
@@ -91,38 +93,59 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/detail_address"
+                app:layout_constraintTop_toBottomOf="@id/detail_price"
                 tools:listitem="@layout/model_detail_data" />
 
-            <TextView
-                android:id="@+id/detail_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="sans-serif-condensed"
-                android:text="Tu comprends, je suis mon meilleur modèle car entre penser et dire,
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:paddingVertical="8dp"
+                app:layout_constraintBottom_toTopOf="@id/detail_agent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/detail_data_rv">
+
+                <TextView
+                    android:id="@+id/detail_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="Tu comprends, je suis mon meilleur modèle car entre penser et dire,
 il y a un monde de différence et c'est très, très beau d'avoir son propre moi-même !
 C'est cette année que j'ai eu la révélation !\n
 You see, premièrement, on vit dans une réalité qu'on a créée et que j'appelle illusion et finalement
 tout refaire depuis le début."
-                android:textSize="18sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/detail_data_rv" />
+                    android:textSize="18sp" />
+
+            </androidx.core.widget.NestedScrollView>
 
             <TextView
                 android:id="@+id/detail_agent"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="8dp"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="24dp"
                 android:fontFamily="sans-serif-condensed-light"
-                android:text="Agent in charge : John BISHOP"
+                android:text="Added by John BISHOP\ncontact : serfosuien@gmail.com"
                 android:textColor="@color/greyText"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/detail_date_added"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:fontFamily="sans-serif-condensed-light"
+                android:text="Added on 21/04/1996"
+                android:textColor="@color/greyText"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/detail_agent" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/detail_fab"
